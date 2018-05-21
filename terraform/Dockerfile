@@ -14,7 +14,7 @@ ARG TERRAFORM_SHA256
 RUN test -n "$TERRAFORM_VERSION" && \
     test -n "$TERRAFORM_SHA256"
 
-RUN apk add --update git curl openssh && \
+RUN apk add --update curl openssh && \
     curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     echo "${TERRAFORM_SHA256}  terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
     sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
