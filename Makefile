@@ -30,8 +30,8 @@ alpine:  ## Alpine Linux (https://alpinelinux.org)
 		$(CWD)/alpine
 	docker push $(REPO)/alpine:latest
 
-TERRAFORM_VERSION := "0.10.0"
-TERRAFORM_SHA256 := "f991039e3822f10d6e05eabf77c9f31f3831149b52ed030775b6ec5195380999"
+TERRAFORM_VERSION := "0.11.7"
+TERRAFORM_SHA256 := "6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418"
 
 .PHONY: terraform
 terraform: alpine  ## Terraform (https://www.terraform.io)
