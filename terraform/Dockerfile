@@ -33,6 +33,10 @@ ARG TERRAFORM_SHA256
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION \
     TERRAFORM_SHA256=$TERRAFORM_SHA256
 
+USER root
+RUN apk add --update ca-certificates
+USER $USER
+
 COPY --from=build /bin/terraform /usr/local/bin/terraform
 
 VOLUME ["/app"]
