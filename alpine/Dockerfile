@@ -37,6 +37,7 @@ RUN addgroup -S $GRP -g $GID && \
     adduser -S -G $GRP -u $UID $USR
 
 USER $USR
+WORKDIR /home/$USR
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/usr/bin/env", "sh"]
