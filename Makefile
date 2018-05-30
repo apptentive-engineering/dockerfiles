@@ -1,49 +1,50 @@
 .DEFAULT_GOAL := help
 
-REPO := "ahawker"
+ENVFILE ?= .env
+include $(ENVFILE)
+export $(shell sed 's/=.*//' $(ENVFILE))
 
-CWD := $(shell pwd)
-COMMIT := $(shell git rev-parse --short HEAD)
-BUILD_ID := $(shell date -u +%s)
-TAG := $(COMMIT)-$(BUILD_ID)
+export COMMIT := $(shell git rev-parse --short HEAD)
+export BUILD_ID := $(shell date -u +%s)
+export TAG := $(COMMIT)-$(BUILD_ID)
 
-USR := "hawker"
-GRP := "hawker"
-UID := "4739"
-GID := "4739"
-INIT_VERSION := "1.2.1"
+SUBDIRS := $(shell find . -mindepth 1 -maxdepth 1 -type d -not -path '*\/.*' | sed "s|^\./||")
+ALL = $(SUBDIRS:%=%-all)
+BUILD = $(SUBDIRS:%=%-build)
+DEPLOY = $(SUBDIRS:%=%-deploy)
 
-.PHONY: alpine
-alpine:  ## Alpine Linux (https://alpinelinux.org)
-	docker build \
-		--rm \
-		--force-rm \
-		--tag $(REPO)/alpine:$(TAG) \
-		--tag $(REPO)/alpine:latest \
-		--build-arg USR=$(USR) \
-		--build-arg GRP=$(GRP) \
-		--build-arg UID=$(UID) \
-		--build-arg GID=$(GID) \
-		--build-arg COMMIT=$(COMMIT) \
-		--build-arg BUILD_ID=$(BUILD_ID) \
-		--build-arg INIT_VERSION=$(INIT_VERSION) \
-		$(CWD)/alpine
-	docker push $(REPO)/alpine:latest
+.PHONY: all
+all: all-requirements $(ALL)  ## Run recursive 'make all' to build and deploy all images.
 
-TERRAFORM_VERSION := "0.11.7"
-TERRAFORM_SHA256 := "6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418"
+.PHONY: build
+build: build-requirements $(BUILD)  ## Run recursive 'make build' to build all images.
 
-.PHONY: terraform
-terraform: alpine  ## Terraform (https://www.terraform.io)
-	docker build \
-		--rm \
-		--force-rm \
-		--tag $(REPO)/terraform:$(TAG) \
-		--tag $(REPO)/terraform:latest \
-		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
-		--build-arg TERRAFORM_SHA256=$(TERRAFORM_SHA256) \
-		$(CWD)/terraform
-	docker push $(REPO)/terraform:latest
+.PHONY: deploy
+deploy: deploy-requirements $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
+
+.PHONY: $(ALL)
+$(ALL):
+	@$(MAKE) -C $(@:%-all=%) all
+
+.PHONY: $(BUILD)
+$(BUILD):
+	@$(MAKE) -C $(@:%-build=%) build
+
+.PHONY: $(DEPLOY)
+$(DEPLOY):
+	@$(MAKE) -C $(@:%-deploy=%) deploy
+
+all-requirements: build-requirements deploy-requirements
+
+build-requirements: requires-REPO \
+	requires-COMMIT \
+	requires-BUILD_ID \
+	requires-TAG
+
+deploy-requirements: requires-REPO
+
+requires-%:
+	@if [ -z '${${*}}' ]; then echo 'Required variable "$*" not set' && exit 1; fi
 
 .PHONY: help
 help: ## Print Makefile usage.
