@@ -27,7 +27,8 @@ ENV USER=$USR \
     GID=$GID \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
-    INIT_VERSION=$INIT_VERSION
+    INIT_VERSION=$INIT_VERSION \
+    LANG=C.UTF-8
 
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
     chmod +x /usr/local/bin/dumb-init
