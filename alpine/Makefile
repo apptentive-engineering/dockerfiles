@@ -25,6 +25,7 @@ build: build-requirements  ## Build image from Dockerfile.
 
 .PHONY: deploy
 deploy: deploy-requirements  ## Deploy image built from Dockerfile.
+	@docker push $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):latest
 
 all-requirements: build-requirements deploy-requirements
