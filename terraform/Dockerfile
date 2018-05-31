@@ -27,6 +27,8 @@ RUN apk add --update curl openssh && \
 # Image responsible for running a Terraform binary.
 FROM ahawker/alpine:latest as runtime
 
+LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
+
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
 

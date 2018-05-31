@@ -1,7 +1,9 @@
 # dockerfiles/sbt
 #
 # Dockerfile for a Java 8 Scala development environment.
-FROM ahawker/jre-8:latest as build
+FROM ahawker/jre-8:latest
+
+LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 
 ARG SCALA_VERSION
 ARG SBT_VERSION

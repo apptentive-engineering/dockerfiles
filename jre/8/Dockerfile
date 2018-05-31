@@ -3,6 +3,8 @@
 # Dockerfile for Java Runtime Environment (JRE).
 FROM ahawker/alpine:latest
 
+LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
+
 ARG JAVA_VERSION
 ARG JAVA_MAJOR_VERSION
 ARG JAVA_MINOR_VERSION
