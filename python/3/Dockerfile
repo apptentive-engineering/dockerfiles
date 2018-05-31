@@ -22,4 +22,6 @@ USER root
 RUN apk add --no-cache $ALPINE_PACKAGE_NAME="$ALPINE_PACKAGE_VERSION" && \
     pip3 install --no-cache-dir --upgrade pip
 
+ENV PATH=$PATH:/home/$USER/.local/bin
+
 USER $USER
