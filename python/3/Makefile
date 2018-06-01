@@ -16,8 +16,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):$(PYTHON_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg PYTHON_VERSION=$(PYTHON_VERSION) \
-		--build-arg ALPINE_PACKAGE_NAME=$(ALPINE_PACKAGE_NAME) \
-		--build-arg ALPINE_PACKAGE_VERSION=$(ALPINE_PACKAGE_VERSION) \
+		--build-arg ALPINE_PYTHON_PACKAGE_NAME=$(ALPINE_PYTHON_PACKAGE_NAME) \
+		--build-arg ALPINE_PYTHON_PACKAGE_VERSION=$(ALPINE_PYTHON_PACKAGE_VERSION) \
 		.
 
 .PHONY: deploy
@@ -31,8 +31,8 @@ all-requirements: build-requirements deploy-requirements
 build-requirements: requires-REPO \
 	requires-IMAGE \
 	requires-PYTHON_VERSION \
-	requires-ALPINE_PACKAGE_NAME \
-	requires-ALPINE_PACKAGE_VERSION
+	requires-ALPINE_PYTHON_PACKAGE_NAME \
+	requires-ALPINE_PYTHON_PACKAGE_VERSION
 
 deploy-requirements: requires-REPO \
 	requires-IMAGE \
