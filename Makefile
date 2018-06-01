@@ -22,6 +22,10 @@ build: build-requirements $(BUILD)  ## Run recursive 'make build' to build all i
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
 
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	@$(MAKE) -C $@
+
 .PHONY: $(ALL)
 $(ALL):
 	@$(MAKE) -C $(@:%-all=%) all
