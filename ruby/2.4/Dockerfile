@@ -1,0 +1,40 @@
+# dockerfiles/ruby/2.4
+#
+# Dockerfile for Ruby 2.4.
+FROM ahawker/alpine:latest
+
+LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
+
+ARG RUBY_VERSION
+ARG RUBY_GEM_VERSION
+ARG GEMS_VERSION
+ARG BUNDLER_VERSION
+ARG ALPINE_PACKAGE_NAME
+ARG ALPINE_PACKAGE_VERSION
+
+RUN test -n "$RUBY_VERSION" && \
+    test -n "$RUBY_GEM_VERSION" && \
+    test -n "$GEMS_VERSION" && \
+    test -n "$BUNDLER_VERSION" && \
+    test -n "$ALPINE_PACKAGE_NAME" && \
+    test -n "$ALPINE_PACKAGE_VERSION"
+
+ENV RUBY_VERSION=$RUBY_VERSION \
+    RUBY_GEM_VERSION=$RUBY_GEM_VERSION \
+    GEMS_VERSION=$GEMS_VERSION \
+    BUNDLER_VERSION=$BUNDLER_VERSION \
+    ALPINE_PACKAGE_NAME=$ALPINE_PACKAGE_NAME \
+    ALPINE_PACKAGE_VERSION=$ALPINE_PACKAGE_VERSION
+
+COPY data/.gemrc /home/$USER/.gemrc
+
+USER root
+
+RUN apk add --no-cache $ALPINE_PACKAGE_NAME="$ALPINE_PACKAGE_VERSION" && \
+    gem update --no-document --system $GEMS_VERSION
+
+ENV PATH=$PATH:/home/$USER/.gem/ruby/$RUBY_GEM_VERSION/bin
+
+USER $USER
+
+RUN gem install bundler --force --version $BUNDLER_VERSION
