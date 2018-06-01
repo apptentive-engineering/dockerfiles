@@ -18,8 +18,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--build-arg JAVA_VERSION=$(JAVA_VERSION) \
 		--build-arg JAVA_MAJOR_VERSION=$(JAVA_MAJOR_VERSION) \
 		--build-arg JAVA_MINOR_VERSION=$(JAVA_MINOR_VERSION) \
-		--build-arg ALPINE_PACKAGE_NAME=$(ALPINE_PACKAGE_NAME) \
-		--build-arg ALPINE_PACKAGE_VERSION=$(ALPINE_PACKAGE_VERSION) \
+		--build-arg ALPINE_JAVA_PACKAGE_NAME=$(ALPINE_JAVA_PACKAGE_NAME) \
+		--build-arg ALPINE_JAVA_PACKAGE_VERSION=$(ALPINE_JAVA_PACKAGE_VERSION) \
 		.
 
 .PHONY: deploy
@@ -36,8 +36,8 @@ build-requirements: requires-REPO \
 	requires-JAVA_VERSION \
 	requires-JAVA_MAJOR_VERSION \
 	requires-JAVA_MINOR_VERSION \
-	requires-ALPINE_PACKAGE_NAME \
-	requires-ALPINE_PACKAGE_VERSION
+	requires-ALPINE_JAVA_PACKAGE_NAME \
+	requires-ALPINE_JAVA_PACKAGE_VERSION
 
 deploy-requirements: requires-REPO \
 	requires-IMAGE
