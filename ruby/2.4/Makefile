@@ -19,8 +19,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--build-arg RUBY_GEM_VERSION=$(RUBY_GEM_VERSION) \
 		--build-arg GEMS_VERSION=$(GEMS_VERSION) \
 		--build-arg BUNDLER_VERSION=$(BUNDLER_VERSION) \
-		--build-arg ALPINE_PACKAGE_NAME=$(ALPINE_PACKAGE_NAME) \
-		--build-arg ALPINE_PACKAGE_VERSION=$(ALPINE_PACKAGE_VERSION) \
+		--build-arg ALPINE_RUBY_PACKAGE_NAME=$(ALPINE_RUBY_PACKAGE_NAME) \
+		--build-arg ALPINE_RUBY_PACKAGE_VERSION=$(ALPINE_RUBY_PACKAGE_VERSION) \
 		.
 
 .PHONY: deploy
@@ -37,8 +37,8 @@ build-requirements: requires-REPO \
 	requires-RUBY_GEM_VERSION \
 	requires-GEMS_VERSION \
 	requires-BUNDLER_VERSION \
-	requires-ALPINE_PACKAGE_NAME \
-	requires-ALPINE_PACKAGE_VERSION
+	requires-ALPINE_RUBY_PACKAGE_NAME \
+	requires-ALPINE_RUBY_PACKAGE_VERSION
 
 deploy-requirements: requires-REPO \
 	requires-IMAGE \
