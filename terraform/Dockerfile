@@ -43,5 +43,3 @@ COPY --from=build /bin/terraform /usr/local/bin/terraform
 
 VOLUME ["/app"]
 WORKDIR "/app"
-
-CMD ["/usr/local/bin/terraform"]
