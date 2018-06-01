@@ -30,7 +30,7 @@ COPY data/.gemrc /home/$USER/.gemrc
 
 USER root
 
-RUN apk add --no-cache $ALPINE_PACKAGE_NAME="$ALPINE_PACKAGE_VERSION" && \
+RUN apk add --no-cache $ALPINE_PACKAGE_NAME="$ALPINE_PACKAGE_VERSION" ruby-irb && \
     gem update --no-document --system $GEMS_VERSION
 
 ENV PATH=$PATH:/home/$USER/.gem/ruby/$RUBY_GEM_VERSION/bin
