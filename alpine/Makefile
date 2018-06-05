@@ -14,6 +14,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--force-rm \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):latest \
+		--build-arg IMAGE=$(IMAGE) \
 		--build-arg USR=$(USR) \
 		--build-arg GRP=$(GRP) \
 		--build-arg UID=$(UID) \
