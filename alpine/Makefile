@@ -31,8 +31,8 @@ deploy: deploy-requirements  ## Deploy image built from Dockerfile.
 all-requirements: build-requirements deploy-requirements
 
 build-requirements: requires-REPO \
-	requires-IMAGE \
 	requires-TAG \
+	requires-IMAGE \
 	requires-COMMIT \
 	requires-BUILD_ID \
 	requires-USR \
@@ -42,6 +42,7 @@ build-requirements: requires-REPO \
 	requires-INIT_VERSION
 
 deploy-requirements: requires-REPO \
+	requires-TAG \
 	requires-IMAGE
 
 requires-%:

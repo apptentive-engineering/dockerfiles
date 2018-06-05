@@ -1,7 +1,10 @@
 # dockerfiles/jre
 #
 # Dockerfile for Java Runtime Environment (JRE).
-FROM ahawker/alpine:latest
+ARG REPO
+ARG TAG=latest
+
+FROM $REPO/alpine:$TAG
 
 LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 

@@ -14,6 +14,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--force-rm \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):latest \
+		--build-arg REPO=$(REPO) \
+		--build-arg TAG=$(TAG) \
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
 		--build-arg TERRAFORM_SHA256=$(TERRAFORM_SHA256) \
 		.
@@ -27,12 +29,13 @@ deploy: deploy-requirements  ## Deploy image built from Dockerfile.
 all-requirements: build-requirements deploy-requirements
 
 build-requirements: requires-REPO \
-	requires-IMAGE \
 	requires-TAG \
+	requires-IMAGE \
 	requires-TERRAFORM_VERSION \
 	requires-TERRAFORM_SHA256
 
 deploy-requirements: requires-REPO \
+	requires-TAG \
 	requires-IMAGE
 
 requires-%:

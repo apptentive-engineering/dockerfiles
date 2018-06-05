@@ -25,6 +25,7 @@ RUN apk add --update curl openssh && \
 
 # Stage: Runtime
 # Image responsible for running a Terraform binary.
+# TODO: Unsure how to parameterize a FROM statement with ARG in a multi-stage build.
 FROM ahawker/alpine:latest as runtime
 
 LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
@@ -36,7 +37,9 @@ ENV TERRAFORM_VERSION=$TERRAFORM_VERSION \
     TERRAFORM_SHA256=$TERRAFORM_SHA256
 
 USER root
+
 RUN apk add --update ca-certificates
+
 USER $USER
 
 COPY --from=build /bin/terraform /usr/local/bin/terraform

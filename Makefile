@@ -45,7 +45,8 @@ build-requirements: requires-REPO \
 	requires-BUILD_ID \
 	requires-TAG
 
-deploy-requirements: requires-REPO
+deploy-requirements: requires-REPO \
+	requires-TAG
 
 requires-%:
 	@if [ -z '${${*}}' ]; then echo 'Required variable "$*" not set' && exit 1; fi

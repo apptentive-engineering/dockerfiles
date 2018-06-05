@@ -1,7 +1,10 @@
 # dockerfiles/python/3
 #
 # Dockerfile for Python 3.
-FROM ahawker/alpine:latest
+ARG REPO
+ARG TAG=latest
+
+FROM $REPO/alpine:$TAG
 
 LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 

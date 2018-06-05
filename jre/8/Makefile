@@ -15,6 +15,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(JAVA_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
+		--build-arg REPO=$(REPO) \
+		--build-arg TAG=$(TAG) \
 		--build-arg JAVA_VERSION=$(JAVA_VERSION) \
 		--build-arg JAVA_MAJOR_VERSION=$(JAVA_MAJOR_VERSION) \
 		--build-arg JAVA_MINOR_VERSION=$(JAVA_MINOR_VERSION) \
@@ -31,8 +33,8 @@ deploy: deploy-requirements  ## Deploy image built from Dockerfile.
 all-requirements: build-requirements deploy-requirements
 
 build-requirements: requires-REPO \
-	requires-IMAGE \
 	requires-TAG \
+	requires-IMAGE \
 	requires-JAVA_VERSION \
 	requires-JAVA_MAJOR_VERSION \
 	requires-JAVA_MINOR_VERSION \
@@ -40,6 +42,7 @@ build-requirements: requires-REPO \
 	requires-ALPINE_JAVA_PACKAGE_VERSION
 
 deploy-requirements: requires-REPO \
+	requires-TAG \
 	requires-IMAGE
 
 requires-%:

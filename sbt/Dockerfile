@@ -1,7 +1,10 @@
 # dockerfiles/sbt
 #
 # Dockerfile for a Java 8 Scala development environment.
-FROM ahawker/jre-8:latest
+ARG REPO
+ARG TAG=latest
+
+FROM $REPO/jre8:$TAG
 
 LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 

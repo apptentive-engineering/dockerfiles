@@ -16,6 +16,8 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(SCALA_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
+		--build-arg REPO=$(REPO) \
+		--build-arg TAG=$(TAG) \
 		--build-arg SCALA_VERSION=$(SCALA_VERSION) \
 		--build-arg SBT_VERSION=$(SBT_VERSION) \
 		.
@@ -29,12 +31,13 @@ deploy: deploy-requirements  ## Deploy image built from Dockerfile.
 all-requirements: build-requirements deploy-requirements
 
 build-requirements: requires-REPO \
-	requires-IMAGE \
 	requires-TAG \
+	requires-IMAGE \
 	requires-SCALA_VERSION \
 	requires-SBT_VERSION
 
 deploy-requirements: requires-REPO \
+	requires-TAG \
 	requires-IMAGE
 
 requires-%:

@@ -1,7 +1,10 @@
 # dockerfiles/cookiecutter
 #
 # Dockerfile for Cookiecutter (https://github.com/audreyr/cookiecutter).
-FROM ahawker/python3:latest
+ARG REPO
+ARG TAG=latest
+
+FROM $REPO/python3:$TAG
 
 LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 
