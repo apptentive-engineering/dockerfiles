@@ -3,8 +3,6 @@
 # Base Dockerfile for Alpine Linux based images.
 FROM alpine:latest
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG USR
 ARG GRP
 ARG UID
@@ -12,6 +10,7 @@ ARG GID
 ARG COMMIT
 ARG BUILD_ID
 ARG INIT_VERSION
+ARG MAINTAINER
 
 RUN test -n "$USR" && \
     test -n "$GRP" && \
@@ -19,7 +18,10 @@ RUN test -n "$USR" && \
     test -n "$GID" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
-    test -n "$INIT_VERSION"
+    test -n "$INIT_VERSION" && \
+    test -n "$MAINTAINER"
+
+LABEL maintainer=$MAINTAINER
 
 ENV USER=$USR \
     GROUP=$GRP \
@@ -28,6 +30,7 @@ ENV USER=$USR \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     INIT_VERSION=$INIT_VERSION \
+    MAINTAINER=$MAINTAINER \
     LANG=C.UTF-8
 
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \

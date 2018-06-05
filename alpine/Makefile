@@ -21,6 +21,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--build-arg COMMIT=$(COMMIT) \
 		--build-arg BUILD_ID=$(BUILD_ID) \
 		--build-arg INIT_VERSION=$(INIT_VERSION) \
+		--build-arg MAINTAINER=$(MAINTAINER) \
 		.
 
 .PHONY: deploy
@@ -39,7 +40,8 @@ build-requirements: requires-REPO \
 	requires-GRP \
 	requires-UID \
 	requires-GID \
-	requires-INIT_VERSION
+	requires-INIT_VERSION \
+	requires-MAINTAINER
 
 deploy-requirements: requires-REPO \
 	requires-TAG \
