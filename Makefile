@@ -4,9 +4,9 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-export COMMIT := $(shell git rev-parse --short HEAD)
-export BUILD_ID := $(shell date -u +%s)
-export TAG := $(COMMIT)-$(BUILD_ID)
+export COMMIT ?= $(shell git rev-parse --short HEAD)
+export BUILD_ID ?= $(shell date -u +%s)
+export TAG ?= $(COMMIT)-$(BUILD_ID)
 
 SUBDIRS := $(shell find . -mindepth 1 -type d -not -path '*\/.*' | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
