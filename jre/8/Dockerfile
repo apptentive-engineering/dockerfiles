@@ -6,8 +6,6 @@ ARG TAG=latest
 
 FROM $REPO/alpine:$TAG
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG JAVA_VERSION
 ARG JAVA_MAJOR_VERSION
 ARG JAVA_MINOR_VERSION

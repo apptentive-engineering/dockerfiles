@@ -6,8 +6,6 @@
 # Image responsible for pulling down and validating a precompiled Terraform binary.
 FROM alpine:latest as build
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
 
@@ -27,8 +25,6 @@ RUN apk add --update curl openssh && \
 # Image responsible for running a Terraform binary.
 # TODO: Unsure how to parameterize a FROM statement with ARG in a multi-stage build.
 FROM ahawker/alpine:latest as runtime
-
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256

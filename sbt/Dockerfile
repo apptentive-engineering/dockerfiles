@@ -6,8 +6,6 @@ ARG TAG=latest
 
 FROM $REPO/jre8:$TAG
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG SCALA_VERSION
 ARG SBT_VERSION
 ARG SCALA_DIR=/opt/scala

@@ -6,8 +6,6 @@ ARG TAG=latest
 
 FROM $REPO/alpine:$TAG
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG RUBY_VERSION
 ARG RUBY_GEM_VERSION
 ARG GEMS_VERSION

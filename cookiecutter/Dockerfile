@@ -6,8 +6,6 @@ ARG TAG=latest
 
 FROM $REPO/python3:$TAG
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
-
 ARG COOKIECUTTER_VERSION
 
 RUN test -n "$COOKIECUTTER_VERSION"

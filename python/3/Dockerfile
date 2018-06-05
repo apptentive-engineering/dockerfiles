@@ -6,7 +6,6 @@ ARG TAG=latest
 
 FROM $REPO/alpine:$TAG
 
-LABEL maintainer="Andrew Hawker <andrew.r.hawker@gmail.com>"
 
 ARG PYTHON_VERSION
 ARG ALPINE_PYTHON_PACKAGE_NAME
