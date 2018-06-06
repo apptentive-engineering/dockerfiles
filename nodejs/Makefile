@@ -33,19 +33,24 @@ build: build-requirements $(BUILD)  ## Build image from Dockerfile.
 		--force-rm \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(NODEJS_VERSION) \
+		--tag $(REPO)/$(IMAGE):$(NODEJS_VERSION)-$(NPM_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
 		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg NODEJS_VERSION=$(NODEJS_VERSION) \
+		--build-arg NPM_VERSION=$(NPM_VERSION) \
 		--build-arg ALPINE_NODEJS_PACKAGE_NAME=$(ALPINE_NODEJS_PACKAGE_NAME) \
 		--build-arg ALPINE_NODEJS_PACKAGE_VERSION=$(ALPINE_NODEJS_PACKAGE_VERSION) \
+		--build-arg ALPINE_NPM_PACKAGE_NAME=$(ALPINE_NPM_PACKAGE_NAME) \
+		--build-arg ALPINE_NPM_PACKAGE_VERSION=$(ALPINE_NPM_PACKAGE_VERSION) \
 		.
 
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Deploy image built from Dockerfile.
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(NODEJS_VERSION)
+	@docker push $(REPO)/$(IMAGE):$(NODEJS_VERSION)-$(NPM_VERSION)
 	@docker push $(REPO)/$(IMAGE):latest
 
 all-requirements: build-requirements deploy-requirements
@@ -55,13 +60,17 @@ build-requirements: requires-REPO \
 	requires-IMAGE \
 	requires-BASE_IMAGE \
 	requires-NODEJS_VERSION \
+	requires-NPM_VERSION \
 	requires-ALPINE_NODEJS_PACKAGE_NAME \
-	requires-ALPINE_NODEJS_PACKAGE_VERSION
+	requires-ALPINE_NODEJS_PACKAGE_VERSION \
+	requires-ALPINE_NPM_PACKAGE_NAME \
+	requires-ALPINE_NPM_PACKAGE_VERSION
 
 deploy-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
-	requires-NODEJS_VERSION
+	requires-NODEJS_VERSION \
+	requires-NPM_VERSION
 
 requires-%:
 	@if [ -z '${${*}}' ]; then echo 'Required variable "$*" not set' && exit 1; fi
