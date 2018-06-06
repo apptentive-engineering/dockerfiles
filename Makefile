@@ -4,6 +4,8 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
+export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export BUILD_ID := $(shell date -u +%s)
 export TAG ?= $(COMMIT)-$(BUILD_ID)
@@ -43,7 +45,8 @@ all-requirements: build-requirements deploy-requirements
 build-requirements: requires-REPO \
 	requires-COMMIT \
 	requires-BUILD_ID \
-	requires-TAG
+	requires-TAG \
+	requires-DOCKERFILES_DIR
 
 deploy-requirements: requires-REPO \
 	requires-TAG
