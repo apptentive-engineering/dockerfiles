@@ -4,11 +4,30 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
+export DOCKERFILES_DIR ?= ..
+
+DEPS := $(shell grep -ril "^IMAGE=\"$(BASE_IMAGE)\"" $(DOCKERFILES_DIR) | xargs dirname)
+ALL = $(DEPS:%=%-all)
+BUILD = $(DEPS:%=%-build)
+DEPLOY = $(DEPS:%=%-deploy)
+
+.PHONY: $(ALL)
+$(ALL):
+	@$(MAKE) -C $(@:%-all=%) all
+
+.PHONY: $(BUILD)
+$(BUILD):
+	@$(MAKE) -C $(@:%-build=%) build
+
+.PHONY: $(DEPLOY)
+$(DEPLOY):
+	@$(MAKE) -C $(@:%-deploy=%) deploy
+
 .PHONY: all
-all: all-requirements build deploy  ## Build and deploy image created from Dockerfile.
+all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
 
 .PHONY: build
-build: build-requirements  ## Build image from Dockerfile.
+build: build-requirements $(BUILD)  ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
@@ -24,7 +43,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		.
 
 .PHONY: deploy
-deploy: deploy-requirements  ## Deploy image built from Dockerfile.
+deploy: deploy-requirements $(DEPLOY)  ## Deploy image built from Dockerfile.
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(MAVEN_VERSION)
 	@docker push $(REPO)/$(IMAGE):latest
