@@ -2,9 +2,10 @@
 #
 # Dockerfile for Cookiecutter (https://github.com/audreyr/cookiecutter).
 ARG REPO
+ARG BASE_IMAGE
 ARG TAG=latest
 
-FROM $REPO/python3:$TAG
+FROM $REPO/$BASE_IMAGE:$TAG
 
 ARG COOKIECUTTER_VERSION
 

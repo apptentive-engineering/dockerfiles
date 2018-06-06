@@ -17,6 +17,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
+		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg MAVEN_VERSION=$(MAVEN_VERSION) \
 		--build-arg ALPINE_MAVEN_PACKAGE_NAME=$(ALPINE_MAVEN_PACKAGE_NAME) \
 		--build-arg ALPINE_MAVEN_PACKAGE_VERSION=$(ALPINE_MAVEN_PACKAGE_VERSION) \
@@ -31,8 +32,9 @@ deploy: deploy-requirements  ## Deploy image built from Dockerfile.
 all-requirements: build-requirements deploy-requirements
 
 build-requirements: requires-REPO \
-	requires-IMAGE \
 	requires-TAG \
+	requires-IMAGE \
+	requires-BASE_IMAGE \
 	requires-MAVEN_VERSION \
 	requires-ALPINE_MAVEN_PACKAGE_NAME \
 	requires-ALPINE_MAVEN_PACKAGE_VERSION

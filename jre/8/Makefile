@@ -17,6 +17,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
+		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg JAVA_VERSION=$(JAVA_VERSION) \
 		--build-arg JAVA_MAJOR_VERSION=$(JAVA_MAJOR_VERSION) \
 		--build-arg JAVA_MINOR_VERSION=$(JAVA_MINOR_VERSION) \
@@ -35,6 +36,7 @@ all-requirements: build-requirements deploy-requirements
 build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
+	requires-BASE_IMAGE \
 	requires-JAVA_VERSION \
 	requires-JAVA_MAJOR_VERSION \
 	requires-JAVA_MINOR_VERSION \

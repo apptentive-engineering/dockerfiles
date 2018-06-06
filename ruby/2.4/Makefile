@@ -17,6 +17,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
+		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg RUBY_VERSION=$(RUBY_VERSION) \
 		--build-arg RUBY_GEM_VERSION=$(RUBY_GEM_VERSION) \
 		--build-arg GEMS_VERSION=$(GEMS_VERSION) \
@@ -36,6 +37,7 @@ all-requirements: build-requirements deploy-requirements
 build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
+	requires-BASE_IMAGE \
 	requires-RUBY_VERSION \
 	requires-RUBY_GEM_VERSION \
 	requires-GEMS_VERSION \

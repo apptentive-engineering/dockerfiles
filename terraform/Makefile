@@ -16,6 +16,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--tag $(REPO)/$(IMAGE):latest \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
+		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
 		--build-arg TERRAFORM_SHA256=$(TERRAFORM_SHA256) \
 		.
@@ -31,6 +32,7 @@ all-requirements: build-requirements deploy-requirements
 build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
+	requires-BASE_IMAGE \
 	requires-TERRAFORM_VERSION \
 	requires-TERRAFORM_SHA256
 

@@ -2,9 +2,10 @@
 #
 # Dockerfile for a Java 8 Scala development environment.
 ARG REPO
+ARG BASE_IMAGE
 ARG TAG=latest
 
-FROM $REPO/jre8:$TAG
+FROM $REPO/$BASE_IMAGE:$TAG
 
 ARG SCALA_VERSION
 ARG SBT_VERSION
