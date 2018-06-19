@@ -4,7 +4,7 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-SUBDIRS := $(shell find . -mindepth 1 -type d -not -path '*\/.*' | sed "s|^\./||")
+SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
 DEPLOY = $(SUBDIRS:%=%-deploy)
