@@ -1,0 +1,10 @@
+sudo: required
+language: bash
+notifications:
+  email: true
+services:
+  - docker
+install:
+  - make
+script:
+  - make build
