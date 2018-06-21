@@ -28,7 +28,7 @@ This allows the `Dockerfile` to build off the most recent version of the `BASE_I
 
 #### Best Practices
 
-It is highly recommended to use `ARG` instructions to parameterize as much of the `Dockerfile` as possible. These values can be injected during the `docker build` process and can be defined in a set of [.env](#.env-file) files. This allows for potential reuse of the `Dockerfile`/`Makefile` combination with any number of `.env` files.
+It is highly recommended to use `ARG` instructions to parameterize as much of the `Dockerfile` as possible. These values can be injected during the `docker build` process and can be defined in a set of `.env` files. This allows for potential reuse of the `Dockerfile`/`Makefile` combination with any number of `.env` files.
 
 ### Makefile
 
@@ -110,6 +110,22 @@ build: build-requirements $(BUILD)
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)
     ...
+```
+
+#### Best Practices
+
+It is highly recommend to define the phony `help` target and set this as the default, enabling users to see supported commands/usage prior to execution. This commonly appears as:
+
+```make
+.DEFAULT_GOAL := help
+
+.PHONY: build
+build: build-requirements $(BUILD)  ## Build image from Dockerfile.
+    ...
+
+.PHONY: help
+help: ## Print Makefile usage.
+    @awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 ```
 
 ## TODO's
