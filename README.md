@@ -128,6 +128,21 @@ help: ## Print Makefile usage.
     @awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 ```
 
+## .env Files
+
+An optional `.env` file can be placed in the directory with the `Dockerfile` and `Makefile` to define values for build arguments. This commonly appears as:
+
+```make
+# Name of the image created from the Dockerfile.
+IMAGE="foobar"
+
+# Name of the base image to build on.
+BASE_IMAGE="foobar-base"
+
+# Version of some package.
+PACKAGE_VERSION="1.2.3"
+```
+
 ## TODO's
 
 * CI/CD Pipeline
