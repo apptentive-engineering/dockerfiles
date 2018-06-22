@@ -31,6 +31,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image f
 	@docker build \
 		--rm \
 		--force-rm \
+		--cache-from $(REPO)/$(IMAGE):latest \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(PYTHON_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \

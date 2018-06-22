@@ -31,6 +31,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 	@docker build \
 		--rm \
 		--force-rm \
+		--cache-from $(REPO)/$(IMAGE):latest \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(NODEJS_VERSION) \
 		--tag $(REPO)/$(IMAGE):$(NODEJS_VERSION)-$(NPM_VERSION) \

@@ -23,6 +23,7 @@ build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
+		--cache-from $(IMAGE):latest \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--label $(LABEL_PREFIX).repo=$(REPO) \
