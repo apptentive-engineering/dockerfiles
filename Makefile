@@ -51,14 +51,17 @@ $(CLEAN):
 $(DEPLOY):
 	@$(MAKE) -C $(@:%-deploy=%) deploy
 
+.PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements
 
+.PHONY: build-requirements
 build-requirements: requires-REPO \
 	requires-COMMIT \
 	requires-BUILD_ID \
 	requires-TAG \
 	requires-DOCKERFILES_DIR
 
+.PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG
 

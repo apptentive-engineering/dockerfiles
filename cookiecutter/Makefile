@@ -42,8 +42,10 @@ deploy: deploy-requirements $(DEPLOY)  ## Deploy image built from Dockerfile.
 	@docker push $(REPO)/$(IMAGE):$(COOKIECUTTER_VERSION)
 	@docker push $(REPO)/$(IMAGE):latest
 
+.PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements
 
+.PHONY: build-requirements
 build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
@@ -51,6 +53,7 @@ build-requirements: requires-REPO \
 	requires-COOKIECUTTER_VERSION \
 	requires-DOCKERFILE
 
+.PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
