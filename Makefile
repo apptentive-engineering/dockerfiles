@@ -8,7 +8,8 @@ export DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 export COMMIT ?= $(shell git rev-parse --short HEAD)
-export BUILD_ID := $(shell date -u +%s)
+export BUILD_TS := $(shell date -u +%s)
+export BUILD_ID ?= $(BUILD_TS)
 export TAG ?= $(COMMIT)-$(BUILD_ID)
 
 SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
