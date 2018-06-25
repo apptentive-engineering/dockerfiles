@@ -4,6 +4,7 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
+DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 DEPS := $(shell grep -ril "^IMAGE=\"$(BASE_IMAGE)\"" $(DOCKERFILES_DIR) | xargs dirname)
@@ -26,8 +27,7 @@ $(DEPLOY):
 .PHONY: all
 all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
 
-.PHONY: build
-build: build-requirements $(BUILD)  ## Build image from Dockerfile.
+build: build-requirements $(BUILD) $(ENVFILE) $(DOCKERFILE)  ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
@@ -44,6 +44,7 @@ build: build-requirements $(BUILD)  ## Build image from Dockerfile.
 		--build-arg ALPINE_RUBY_PACKAGE_NAME=$(ALPINE_RUBY_PACKAGE_NAME) \
 		--build-arg ALPINE_RUBY_PACKAGE_VERSION=$(ALPINE_RUBY_PACKAGE_VERSION) \
 		.
+	@echo $(REPO)/$(IMAGE):$(TAG) > build
 
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Deploy image built from Dockerfile.
@@ -62,7 +63,8 @@ build-requirements: requires-REPO \
 	requires-GEMS_VERSION \
 	requires-BUNDLER_VERSION \
 	requires-ALPINE_RUBY_PACKAGE_NAME \
-	requires-ALPINE_RUBY_PACKAGE_VERSION
+	requires-ALPINE_RUBY_PACKAGE_VERSION \
+	requires-DOCKERFILE
 
 deploy-requirements: requires-REPO \
 	requires-TAG \

@@ -4,11 +4,13 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
+DOCKERFILE ?= Dockerfile
+export DOCKERFILES_DIR ?= ..
+
 .PHONY: all
 all: all-requirements build deploy  ## Build and deploy image created from Dockerfile.
 
-.PHONY: build
-build: build-requirements  ## Build image from Dockerfile.
+build: build-requirements $(ENVFILE) $(DOCKERFILE)  ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
@@ -24,6 +26,7 @@ build: build-requirements  ## Build image from Dockerfile.
 		--build-arg INIT_VERSION=$(INIT_VERSION) \
 		--build-arg MAINTAINER=$(MAINTAINER) \
 		.
+	@echo $(REPO)/$(IMAGE):$(TAG) > build
 
 .PHONY: deploy
 deploy: deploy-requirements  ## Deploy image built from Dockerfile.
@@ -43,7 +46,8 @@ build-requirements: requires-REPO \
 	requires-UID \
 	requires-GID \
 	requires-INIT_VERSION \
-	requires-MAINTAINER
+	requires-MAINTAINER \
+	requires-DOCKERFILE
 
 deploy-requirements: requires-REPO \
 	requires-TAG \
