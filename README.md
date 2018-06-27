@@ -100,15 +100,14 @@ $(DEPLOY):
 
 ```make
 .PHONY: all
-all: all-requirements $(BUILD) build $(DEPLOY) deploy
+all: all-requirements build deploy
     ...
 
-.PHONY: build
-build: build-requirements $(BUILD)
+build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements
     ...
 
 .PHONY: deploy
-deploy: deploy-requirements $(DEPLOY)
+deploy: $(BASE_IMAGE)-deploy $(DEPLOY_DEPS) | deploy-requirements
     ...
 ```
 
