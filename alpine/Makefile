@@ -7,10 +7,12 @@ export $(shell sed 's/=.*//' $(ENVFILE))
 DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
+BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname 'build' \))
+
 .PHONY: all
 all: all-requirements build deploy  ## Build and deploy image created from Dockerfile.
 
-build: build-requirements $(ENVFILE) $(DOCKERFILE)  ## Build image from Dockerfile.
+build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
@@ -26,7 +28,7 @@ build: build-requirements $(ENVFILE) $(DOCKERFILE)  ## Build image from Dockerfi
 		--build-arg INIT_VERSION=$(INIT_VERSION) \
 		--build-arg MAINTAINER=$(MAINTAINER) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build
+	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
 
 .PHONY: deploy
 deploy: deploy-requirements  ## Deploy image built from Dockerfile.

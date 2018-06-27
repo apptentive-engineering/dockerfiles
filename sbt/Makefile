@@ -7,27 +7,17 @@ export $(shell sed 's/=.*//' $(ENVFILE))
 DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
-DEPS := $(shell grep -ril "^IMAGE=\"$(BASE_IMAGE)\"" $(DOCKERFILES_DIR) | xargs dirname)
-ALL = $(DEPS:%=%-all)
-BUILD = $(DEPS:%=%-build)
-DEPLOY = $(DEPS:%=%-deploy)
+BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
+BASE_IMAGE_DEPS := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)" $(DOCKERFILES_DIR) | xargs dirname)
 
-.PHONY: $(ALL)
-$(ALL):
-	@$(MAKE) -C $(@:%-all=%) all
-
-.PHONY: $(BUILD)
-$(BUILD):
-	@$(MAKE) -C $(@:%-build=%) build
-
-.PHONY: $(DEPLOY)
-$(DEPLOY):
-	@$(MAKE) -C $(@:%-deploy=%) deploy
+$(BASE_IMAGE)-%:
+	@$(MAKE) -C $(BASE_IMAGE_DEPS) $*
+	@echo $(REPO)/$(BASE_IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 
 .PHONY: all
 all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
 
-build: build-requirements $(BUILD) $(ENVFILE) $(DOCKERFILE)  ## Build image from Dockerfile.
+build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image from Dockerfile.
 	@docker build \
 		--rm \
 		--force-rm \
@@ -41,7 +31,7 @@ build: build-requirements $(BUILD) $(ENVFILE) $(DOCKERFILE)  ## Build image from
 		--build-arg SCALA_VERSION=$(SCALA_VERSION) \
 		--build-arg SBT_VERSION=$(SBT_VERSION) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build
+	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
 
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Deploy image built from Dockerfile.
