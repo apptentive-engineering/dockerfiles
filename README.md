@@ -134,13 +134,13 @@ An optional `.env` file can be placed in the directory with the `Dockerfile` and
 
 ```make
 # Name of the image created from the Dockerfile.
-IMAGE="foobar"
+IMAGE=foobar
 
 # Name of the base image to build on.
-BASE_IMAGE="foobar-base"
+BASE_IMAGE=foobar-base
 
 # Version of some package.
-PACKAGE_VERSION="1.2.3"
+PACKAGE_VERSION=1.2.3
 ```
 
 ## TODO's
