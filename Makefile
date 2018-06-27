@@ -9,6 +9,7 @@ export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)
 
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export BUILD_TS := $(shell date -u +%s)
+export BUILD_TS_TOUCH := $(shell date -r $(BUILD_TS) '+%Y%m%d%H%M.%S')
 export BUILD_ID ?= $(BUILD_TS)
 export TAG ?= $(COMMIT)-$(BUILD_ID)
 
