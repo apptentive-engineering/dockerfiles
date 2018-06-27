@@ -16,6 +16,7 @@ export TAG ?= $(COMMIT)-$(BUILD_ID)
 SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
+CLEAN = $(SUBDIRS:%=%-clean)
 DEPLOY = $(SUBDIRS:%=%-deploy)
 
 .PHONY: all
@@ -26,6 +27,9 @@ build: $(BUILD) | build-requirements  ## Run recursive 'make build' to build all
 
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
+
+.PHONY: clean
+clean: $(CLEAN)  ## Run recursive 'make clean' to clean all image directories.
 
 .PHONY: $(SUBDIRS)
 $(SUBDIRS):
@@ -38,6 +42,10 @@ $(ALL):
 .PHONY: $(BUILD)
 $(BUILD):
 	@$(MAKE) -C $(@:%-build=%) build
+
+.PHONY: $(CLEAN)
+$(CLEAN):
+	@$(MAKE) -C $(@:%-clean=%) clean
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
