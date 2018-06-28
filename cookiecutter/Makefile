@@ -7,7 +7,7 @@ export $(shell sed 's/=.*//' $(ENVFILE))
 DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
-BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname 'build' \))
+BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
 BASE_IMAGE_DEPS := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)" $(DOCKERFILES_DIR) | xargs dirname)
 
 $(BASE_IMAGE)-%:

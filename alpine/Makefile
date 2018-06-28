@@ -7,7 +7,7 @@ export $(shell sed 's/=.*//' $(ENVFILE))
 DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
-BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname 'build' \))
+BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
 
 .PHONY: all
 all: all-requirements build deploy  ## Build and deploy image created from Dockerfile.
