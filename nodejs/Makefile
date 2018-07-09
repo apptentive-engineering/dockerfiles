@@ -19,7 +19,9 @@ BASE_IMAGE_DEPS := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)" $(DOCKERFILES_DIR) |
 $(BASE_IMAGE)-%:
 	$(call TRACE, [$(IMAGE)] - Running '$*' for base image '$(BASE_IMAGE)')
 	@$(MAKE) -C $(BASE_IMAGE_DEPS) $*
-	@echo $(REPO)/$(BASE_IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
+	@if [ "$*" = "build" ]; then \
+		echo $(REPO)/$(BASE_IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@; \
+	fi;
 
 .PHONY: all
 all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
