@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -62,8 +61,7 @@ build-requirements: requires-REPO \
 	requires-JAVA_MAJOR_VERSION \
 	requires-JAVA_MINOR_VERSION \
 	requires-ALPINE_JAVA_PACKAGE_NAME \
-	requires-ALPINE_JAVA_PACKAGE_VERSION \
-	requires-DOCKERFILE
+	requires-ALPINE_JAVA_PACKAGE_VERSION
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \

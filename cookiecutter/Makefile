@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -54,8 +53,7 @@ build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
 	requires-BASE_IMAGE \
-	requires-COOKIECUTTER_VERSION \
-	requires-DOCKERFILE
+	requires-COOKIECUTTER_VERSION
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \

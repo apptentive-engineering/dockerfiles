@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-export DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 export COMMIT ?= $(shell git rev-parse --short HEAD)

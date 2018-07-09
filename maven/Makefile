@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -58,8 +57,7 @@ build-requirements: requires-REPO \
 	requires-BASE_IMAGE \
 	requires-MAVEN_VERSION \
 	requires-ALPINE_MAVEN_PACKAGE_NAME \
-	requires-ALPINE_MAVEN_PACKAGE_VERSION \
-	requires-DOCKERFILE
+	requires-ALPINE_MAVEN_PACKAGE_VERSION
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \

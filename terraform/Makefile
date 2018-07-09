@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -57,8 +56,7 @@ build-requirements: requires-REPO \
 	requires-IMAGE \
 	requires-BASE_IMAGE \
 	requires-TERRAFORM_VERSION \
-	requires-TERRAFORM_SHA256 \
-	requires-DOCKERFILE
+	requires-TERRAFORM_SHA256
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \

@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -63,8 +62,7 @@ build-requirements: requires-REPO \
 	requires-UID \
 	requires-GID \
 	requires-INIT_VERSION \
-	requires-MAINTAINER \
-	requires-DOCKERFILE
+	requires-MAINTAINER
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \

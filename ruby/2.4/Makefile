@@ -4,7 +4,6 @@ ENVFILE ?= .env
 include $(ENVFILE)
 export $(shell sed 's/=.*//' $(ENVFILE))
 
-DOCKERFILE ?= Dockerfile
 export DOCKERFILES_DIR ?= ..
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
@@ -66,8 +65,7 @@ build-requirements: requires-REPO \
 	requires-GEMS_VERSION \
 	requires-BUNDLER_VERSION \
 	requires-ALPINE_RUBY_PACKAGE_NAME \
-	requires-ALPINE_RUBY_PACKAGE_VERSION \
-	requires-DOCKERFILE
+	requires-ALPINE_RUBY_PACKAGE_VERSION
 
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
