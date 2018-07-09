@@ -6,6 +6,8 @@ services:
 - docker
 install:
 - make
+before_script:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 script:
 - make build
 env:
