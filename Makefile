@@ -6,6 +6,11 @@ export $(shell sed 's/=.*//' $(ENVFILE))
 
 export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
+ifneq ($(strip $(wildcard $(LOGGERFILE))),)
+	include $(LOGGERFILE)
+endif
+
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export BUILD_TS := $(shell date -u +%s)
 export BUILD_TS_TOUCH := $(shell date -r $(BUILD_TS) '+%Y%m%d%H%M.%S')
@@ -20,15 +25,19 @@ DEPLOY = $(SUBDIRS:%=%-deploy)
 
 .PHONY: all
 all: all-requirements $(ALL)  ## Run recursive 'make all' to build and deploy all images.
+	$(call TRACE, [root] - Recursive '$@' complete)
 
 .PHONY: build
 build: $(BUILD) | build-requirements  ## Run recursive 'make build' to build all images.
+	$(call TRACE, [root] - Recursive '$@' complete)
 
 .PHONY: deploy
 deploy: deploy-requirements $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
+	$(call TRACE, [root] - Recursive '$@' complete)
 
 .PHONY: clean
 clean: $(CLEAN)  ## Run recursive 'make clean' to clean all image directories.
+	$(call TRACE, [root] - Recursive '$@' complete)
 
 .PHONY: $(SUBDIRS)
 $(SUBDIRS):
@@ -36,18 +45,22 @@ $(SUBDIRS):
 
 .PHONY: $(ALL)
 $(ALL):
+	$(call TRACE, [root] - Running 'all' for child image '$(@:%-all=%)')
 	@$(MAKE) -C $(@:%-all=%) all
 
 .PHONY: $(BUILD)
 $(BUILD):
+	$(call TRACE, [root] - Running 'build' for child image '$(@:%-build=%)')
 	@$(MAKE) -C $(@:%-build=%) build
 
 .PHONY: $(CLEAN)
 $(CLEAN):
+	$(call TRACE, [root] - Running 'clean' for child image '$(@:%-clean=%)')
 	@$(MAKE) -C $(@:%-clean=%) clean
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
+	$(call TRACE, [root] - Running 'deploy' for child image '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
 
 .PHONY: all-requirements

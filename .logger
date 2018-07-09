@@ -1,0 +1,15 @@
+DEFAULT= \033[0;39m
+RED=\033[1;31m
+GREEN=\033[1;32m
+YELLOW=\033[1;33m
+MAGENTA=\033[1;35m
+
+define LOG
+	@echo "$(value $(1))[$(2)]$(DEFAULT) - $(strip $(3))"
+endef
+
+TRACE = $(call LOG,MAGENTA,TRACE,$(1))
+DEBUG = $(call LOG,DEFAULT,DEBUG,$(1))
+INFO = $(call LOG,GREEN,INFO,$(1))
+WARN = $(call LOG,YELLOW,INFO,$(1))
+ERROR = $(call LOG,RED,INFO,$(1))
