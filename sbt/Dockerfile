@@ -7,15 +7,20 @@ ARG TAG=latest
 
 FROM $REPO/$BASE_IMAGE:$TAG
 
+ARG LABEL_PREFIX
 ARG SCALA_VERSION
 ARG SBT_VERSION
 ARG SCALA_DIR=/opt/scala
 ARG SBT_DIR=/opt/sbt
 
-RUN test -n "$SCALA_VERSION" && \
+RUN test -n "$LABEL_PREFIX" && \
+    test -n "$SCALA_VERSION" && \
     test -n "$SBT_VERSION" && \
     test -n "$SCALA_DIR" && \
     test -n "$SBT_DIR"
+
+LABEL $LABEL_PREFIX.scala.version=$SCALA_VERSION \
+      $LABEL_PREFIX.sbt.version=$SBT_VERSION
 
 ENV SCALA_VERSION=$SCALA_VERSION \
     SBT_VERSION=$SBT_VERSION

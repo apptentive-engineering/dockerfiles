@@ -15,6 +15,7 @@ ARG BUILD_ID
 ARG BUILD_TS
 ARG INIT_VERSION
 ARG MAINTAINER
+ARG LABEL_PREFIX
 
 RUN test -n "$USR" && \
     test -n "$GRP" && \
@@ -24,9 +25,14 @@ RUN test -n "$USR" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
     test -n "$INIT_VERSION" && \
-    test -n "$MAINTAINER"
+    test -n "$MAINTAINER" && \
+    test -n "$LABEL_PREFIX"
 
-LABEL maintainer=$MAINTAINER
+LABEL $LABEL_PREFIX.commit=$COMMIT \
+      $LABEL_PREFIX.build.id=$BUILD_ID \
+      $LABEL_PREFIX.build.ts=$BUILD_TS \
+      $LABEL_PREFIX.init.version=$INIT_VERSION \
+      $LABEL_PREFIX.maintainer=$MAINTAINER
 
 ENV USER=$USR \
     GROUP=$GRP \
@@ -37,6 +43,7 @@ ENV USER=$USR \
     BUILD_TS=$BUILD_TS \
     INIT_VERSION=$INIT_VERSION \
     MAINTAINER=$MAINTAINER \
+    LABEL_PREFIX=$LABEL_PREFIX \
     LANG=C.UTF-8
 
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \

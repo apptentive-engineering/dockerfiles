@@ -26,8 +26,13 @@ RUN apk add --update curl openssh && \
 # TODO: Unsure how to parameterize a FROM statement with ARG in a multi-stage build.
 FROM ahawker/alpine:latest as runtime
 
+ARG LABEL_PREFIX
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
+
+RUN test -n "$LABEL_PREFIX"
+
+LABEL $LABEL_PREFIX.terraform.version=$TERRAFORM_VERSION
 
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION \
     TERRAFORM_SHA256=$TERRAFORM_SHA256
