@@ -7,7 +7,7 @@ services:
 install:
 - make
 before_script:
-- export BUILD_ID=$TRAVIS_BUILD_NUMBER
+- export BUILD_ID=$TRAVIS_BUILD_ID
 - export BUILD_TS=$(date -u +%s)
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 script:
