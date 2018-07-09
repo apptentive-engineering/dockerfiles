@@ -13,10 +13,16 @@ ifneq ($(strip $(wildcard $(LOGGERFILE))),)
 	include $(LOGGERFILE)
 endif
 
-export COMMIT ?= $(shell git rev-parse --short HEAD)
+ifeq ($(CI), true)
+export BUILD_ID
+export BUILD_TS
+export BUILD_TS_TOUCH := $(shell date --date="@$(BUILD_TS)" '+%Y%m%d%H%M.%S')
+else
+export BUILD_ID := $(shell head -n512 /dev/urandom | cksum | cut -f1 -d ' ')
 export BUILD_TS := $(shell date -u +%s)
 export BUILD_TS_TOUCH := $(shell date -r $(BUILD_TS) '+%Y%m%d%H%M.%S')
-export BUILD_ID ?= $$RANDOM
+endif
+export COMMIT ?= $(shell git rev-parse --short HEAD)
 export TAG ?= $(COMMIT)-$(BUILD_TS)-$(BUILD_ID)
 
 SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
