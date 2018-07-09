@@ -25,6 +25,7 @@ build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 		--build-arg GID=$(GID) \
 		--build-arg COMMIT=$(COMMIT) \
 		--build-arg BUILD_ID=$(BUILD_ID) \
+		--build-arg BUILD_TS=$(BUILD_TS) \
 		--build-arg INIT_VERSION=$(INIT_VERSION) \
 		--build-arg MAINTAINER=$(MAINTAINER) \
 		.
@@ -49,6 +50,7 @@ build-requirements: requires-REPO \
 	requires-IMAGE \
 	requires-COMMIT \
 	requires-BUILD_ID \
+	requires-BUILD_TS \
 	requires-BASE_IMAGE \
 	requires-USR \
 	requires-GRP \

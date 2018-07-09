@@ -12,6 +12,7 @@ ARG UID
 ARG GID
 ARG COMMIT
 ARG BUILD_ID
+ARG BUILD_TS
 ARG INIT_VERSION
 ARG MAINTAINER
 
@@ -21,6 +22,7 @@ RUN test -n "$USR" && \
     test -n "$GID" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
+    test -n "$BUILD_TS" && \
     test -n "$INIT_VERSION" && \
     test -n "$MAINTAINER"
 
@@ -32,6 +34,7 @@ ENV USER=$USR \
     GID=$GID \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
+    BUILD_TS=$BUILD_TS \
     INIT_VERSION=$INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LANG=C.UTF-8
