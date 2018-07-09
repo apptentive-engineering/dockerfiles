@@ -82,6 +82,11 @@ build-requirements: requires-REPO \
 	requires-ALPINE_NPM_PACKAGE_NAME \
 	requires-ALPINE_NPM_PACKAGE_VERSION
 
+.PHONY: clean-requirements
+clean-requirements: requires-IMAGE \
+	requires-LABEL_PREFIX \
+	requires-BUILD_TS
+
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG \

@@ -71,6 +71,11 @@ build-requirements: requires-REPO \
 	requires-BASE_IMAGE \
 	requires-COOKIECUTTER_VERSION
 
+.PHONY: clean-requirements
+clean-requirements: requires-IMAGE \
+	requires-LABEL_PREFIX \
+	requires-BUILD_TS
+
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG \

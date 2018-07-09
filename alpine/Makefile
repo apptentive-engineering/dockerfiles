@@ -77,6 +77,11 @@ build-requirements: requires-REPO \
 	requires-INIT_VERSION \
 	requires-MAINTAINER
 
+.PHONY: clean-requirements
+clean-requirements: requires-IMAGE \
+	requires-LABEL_PREFIX \
+	requires-BUILD_TS
+
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG \

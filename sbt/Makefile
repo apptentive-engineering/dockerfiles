@@ -76,6 +76,11 @@ build-requirements: requires-REPO \
 	requires-SCALA_VERSION \
 	requires-SBT_VERSION
 
+.PHONY: clean-requirements
+clean-requirements: requires-IMAGE \
+	requires-LABEL_PREFIX \
+	requires-BUILD_TS
+
 .PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
 	requires-TAG \
