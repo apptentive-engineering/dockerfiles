@@ -1,8 +1,10 @@
 .DEFAULT_GOAL := help
 
 ENVFILE ?= .env
-include $(ENVFILE)
-export $(shell sed 's/=.*//' $(ENVFILE))
+ifneq ($(strip $(wildcard $(ENVFILE))),)
+	include $(ENVFILE)
+	export $(shell sed 's/=.*//' $(ENVFILE))
+endif
 
 export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
