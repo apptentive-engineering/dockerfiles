@@ -16,8 +16,8 @@ endif
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export BUILD_TS := $(shell date -u +%s)
 export BUILD_TS_TOUCH := $(shell date -r $(BUILD_TS) '+%Y%m%d%H%M.%S')
-export BUILD_ID ?= $(BUILD_TS)
-export TAG ?= $(COMMIT)-$(BUILD_ID)
+export BUILD_ID ?= $$RANDOM
+export TAG ?= $(COMMIT)-$(BUILD_TS)-$(BUILD_ID)
 
 SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
