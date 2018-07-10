@@ -36,6 +36,7 @@ This is just a standard `Makefile` for GNU Make. At a minimum, it needs to defin
 
 * `all` - Invokes the `build` and then subsequent `deploy` target.
 * `build` - Builds a image by injecting build arguments into `docker build` for the local `Dockerfile`.
+* `clean` - Cleans up any state created by previous builds, including images stored by the `Docker` daemon.
 * `deploy` - Pushes tagged versions of the locally built image to a remote repository.
 
 Beyond defining these targets, the `Makefile` is responsible for the following items:
