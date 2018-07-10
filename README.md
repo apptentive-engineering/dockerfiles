@@ -77,43 +77,38 @@ ifneq ($(strip $(wildcard $(ENVFILE))),)
 endif
 ```
 
-#### Base Image Detection
+#### Dependency Detection
 
 If the `Dockerfile` has a base image dependency that is part of this repository, it is the responsiblity of this `Makefile` to detect the location of the base image and create a phony target dependency on it. This commonly appears as:
 
-**Create recursive all/build/deploy targets for base image**
+**Create dependencies based on files within image directory**
 
 ```make
-DEPS := $(shell grep -ril "^IMAGE=\"$(BASE_IMAGE)\"" $(DOCKERFILES_DIR) | xargs dirname)
-ALL = $(DEPS:%=%-all)
-BUILD = $(DEPS:%=%-build)
-DEPLOY = $(DEPS:%=%-deploy)
+BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
 
-.PHONY: $(ALL)
-$(ALL):
-	@$(MAKE) -C $(@:%-all=%) all
-
-.PHONY: $(BUILD)
-$(BUILD):
-	@$(MAKE) -C $(@:%-build=%) build
-
-.PHONY: $(DEPLOY)
-$(DEPLOY):
-	@$(MAKE) -C $(@:%-deploy=%) deploy
+build: $(BUILD_DEPS)
+    ...
 ```
 
-**Add base image phony as target to all/build/deploy targets**
+**Detect base image and create target for invoking actions against it**
 
 ```make
-.PHONY: all
-all: all-requirements build deploy
-    ...
+BASE_IMAGE_DEPS := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)" $(DOCKERFILES_DIR) | xargs dirname)
 
+$(BASE_IMAGE)-%:
+	@$(MAKE) -C $(BASE_IMAGE_DEPS) $*
+```
+
+**Add base image and files as target dependencies**
+
+```make
 build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements
     ...
 
+clean: $(BASE_IMAGE)-clean | clean-requirements
+
 .PHONY: deploy
-deploy: $(BASE_IMAGE)-deploy $(DEPLOY_DEPS) | deploy-requirements
+deploy: build $(BASE_IMAGE)-deploy | deploy-requirements
     ...
 ```
 
