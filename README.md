@@ -30,7 +30,7 @@ If you're a developer working on this repository, here's some hints to hopefully
 
 **Usage**
 
-All `Makefile` should support `make help` to display their usage with `help` being the default goal if unspecified.
+All `Makefile` should support `make help` to display their usage and have `help` set as their default goal.
 
 ```bash
 $ make
@@ -57,7 +57,7 @@ help                           Print Makefile usage.
 That's just the default target, `help`. Let's specify one by invoking the `build` target for the `alpine` image.
 
 ```bash
-make alpine-build
+$ make alpine-build
 [TRACE] - [root] - Running 'build' for child image 'alpine'
 [TRACE] - [alpine] - Running 'build'
 Sending build context to Docker daemon  9.216kB
@@ -70,7 +70,7 @@ Successfully tagged ahawker/alpine:latest
 [TRACE] - [root] - Completed 'build' for child image 'alpine'
 ```
 
-The recursive targets following the `<directory-name>-<target-name>` pattern. Building the `alpine` image is the `alpine-build` target while deploying it is `alpine-deploy`. This pattern holds for all subdirectories, including nested ones.
+The recursive targets follow the `<directory-name>-<target-name>` pattern. Building the `alpine` image is the `alpine-build` target while deploying it is `alpine-deploy`. This pattern holds for all subdirectories, including ones nested to the N'th degree.
 
 For example, let's build a specific ruby image that is multiple directories down.
 
@@ -92,7 +92,7 @@ Successfully tagged ahawker/ruby2.4:latest
 
 ## Troubleshooting
 
-This repository uses `make` as the build system. If you're not familiar with it, debugging what's happening behind the scenes can sometimes feel like dark magic. Without opening a too large can of worms, let's walk through some of the common issues I might expect one to encounter while developing within this repository.
+This repository uses `make` as the build system. If you're not familiar with it, debugging what's happening behind the scenes can sometimes feel like dark magic. Without opening a large can of worms, let's walk through some of the common issues one might encounter while developing within this repository.
 
 ### A build command failed with: "manifest for XYZ not found"
 
@@ -116,7 +116,7 @@ make: *** [ruby/2.4-build] Error 2
 
 **Context:**
 
-When any `make` command is invoked, a number of runtime defined parameters are set within the root `Makefile`. The two major ones to consider are `BUILD_ID` and `BUILD_TS`. If not specified by the build environment, these will be set to a random identifier and the current timestamp epoch respectively. These values, along with the `git` hash will be used to `tag` every image build in the current process execution.
+When any `make` command is invoked, a number of runtime defined parameters are set within the root `Makefile`. The two major ones to consider are `BUILD_ID` and `BUILD_TS`. If not specified by the build environment, these will be set to a random identifier and the current timestamp epoch respectively. These values, along with the `git` short hash, will be used to `tag` every image build in the current process execution.
 
 **Issue:**
 
