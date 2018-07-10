@@ -12,6 +12,10 @@ This is under active development but the core functionality should be in place.
 
 Automate the process of building structured images from Dockerfiles that are tagged/linked together.
 
+## Related
+
+See [Dotfiles](https://github.com/ahawker/dotfiles) for bringing these into your shell environment.
+
 ## Usage
 
 ### End User
