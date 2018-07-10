@@ -269,6 +269,16 @@ help: ## Print Makefile usage.
     @awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 ```
 
+It is highly recommend to use the logging functionality defined in `.logger`. This commonly appears as:
+
+```make
+build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image from Dockerfile.
+	$(call TRACE, [$(IMAGE)] - Running '$@')
+    ...
+    ...
+	$(call TRACE, [$(IMAGE)] - Completed '$@')
+```
+
 ## .env Files
 
 An optional `.env` file can be placed in the directory with the `Dockerfile` and `Makefile` to define values for build arguments. This commonly appears as:
