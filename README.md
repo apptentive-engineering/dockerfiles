@@ -71,8 +71,10 @@ If a `.env` file is located within the directory, the `Makefile` is responsible 
 
 ```make
 ENVFILE ?= .env
-include $(ENVFILE)
-export $(shell sed 's/=.*//' $(ENVFILE))
+ifneq ($(strip $(wildcard $(ENVFILE))),)
+	include $(ENVFILE)
+	export $(shell sed 's/=.*//' $(ENVFILE))
+endif
 ```
 
 #### Base Image Detection
