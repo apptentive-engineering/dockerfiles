@@ -55,21 +55,25 @@ $(SUBDIRS):
 $(ALL):
 	$(call TRACE, [root] - Running 'all' for child image '$(@:%-all=%)')
 	@$(MAKE) -C $(@:%-all=%) all
+	$(call TRACE, [root] - Completed 'all' for child image '$(@:%-all=%)')
 
 .PHONY: $(BUILD)
 $(BUILD):
 	$(call TRACE, [root] - Running 'build' for child image '$(@:%-build=%)')
 	@$(MAKE) -C $(@:%-build=%) build
+	$(call TRACE, [root] - Completed 'build' for child image '$(@:%-build=%)')
 
 .PHONY: $(CLEAN)
 $(CLEAN):
 	$(call TRACE, [root] - Running 'clean' for child image '$(@:%-clean=%)')
 	@$(MAKE) -C $(@:%-clean=%) clean
+	$(call TRACE, [root] - Completed 'clean' for child image '$(@:%-clean=%)')
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
 	$(call TRACE, [root] - Running 'deploy' for child image '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
+	$(call TRACE, [root] - Completed 'deploy' for child image '$(@:%-deploy=%)')
 
 .PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements

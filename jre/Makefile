@@ -39,21 +39,25 @@ deploy: $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
 $(ALL):
 	$(call TRACE, [jre] - Running 'all' for '$(@:%-all=%)')
 	@$(MAKE) -C $(@:%-all=%) all
+	$(call TRACE, [jre] - Completed 'all' for '$(@:%-all=%)')
 
 .PHONY: $(BUILD)
 $(BUILD):
 	$(call TRACE, [jre] - Running 'build' for '$(@:%-build=%)')
 	@$(MAKE) -C $(@:%-build=%) build
+	$(call TRACE, [jre] - Completed 'build' for '$(@:%-build=%)')
 
 .PHONY: $(CLEAN)
 $(CLEAN):
 	$(call TRACE, [jre] - Running 'clean' for '$(@:%-clean=%)')
 	@$(MAKE) -C $(@:%-clean=%) clean
+	$(call TRACE, [jre] - Completed 'clean' for '$(@:%-clean=%)')
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
 	$(call TRACE, [jre] - Running 'deploy' for '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
+	$(call TRACE, [jre] - Completed 'deploy' for '$(@:%-deploy=%)')
 
 .PHONY: help
 help: ## Print Makefile usage.

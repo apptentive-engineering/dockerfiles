@@ -39,21 +39,25 @@ deploy: $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
 $(ALL):
 	$(call TRACE, [python] - Running 'all' for child image '$(@:%-all=%)')
 	@$(MAKE) -C $(@:%-all=%) all
+	$(call TRACE, [python] - Completed 'all' for child image '$(@:%-all=%)')
 
 .PHONY: $(BUILD)
 $(BUILD):
 	$(call TRACE, [python] - Running 'build' for child image '$(@:%-build=%)')
 	@$(MAKE) -C $(@:%-build=%) build
+	$(call TRACE, [python] - Completed 'build' for child image '$(@:%-build=%)')
 
 .PHONY: $(CLEAN)
 $(CLEAN):
 	$(call TRACE, [python] - Running 'clean' for child image '$(@:%-clean=%)')
 	@$(MAKE) -C $(@:%-clean=%) clean
+	$(call TRACE, [python] - Completed 'clean' for child image '$(@:%-clean=%)')
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
 	$(call TRACE, [python] - Running 'deploy' for child image '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
+	$(call TRACE, [python] - Completed 'deploy' for child image '$(@:%-deploy=%)')
 
 .PHONY: help
 help: ## Print Makefile usage.
