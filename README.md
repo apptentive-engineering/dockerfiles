@@ -6,7 +6,7 @@ Build a common set of images from Dockerfiles.
 
 ## Status
 
-This is under active development and there are a number of patterns not fully well-defined yet.
+This is under active development but the core functionality should be in place.
 
 ## Goals
 
@@ -279,11 +279,6 @@ BASE_IMAGE=foobar-base
 # Version of some package.
 PACKAGE_VERSION=1.2.3
 ```
-
-## TODO's
-
-* CI/CD Pipeline
-* Additional tools
 
 ## Open Questions
 
