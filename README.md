@@ -46,14 +46,17 @@ Beyond defining these targets, the `Makefile` is responsible for the following i
 Validation of build arguments before invoking the `build` and `deploy` targets which call `docker build` and `docker push` respectively. This commonly appears as:
 
 ```make
+.PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements
 
+.PHONY: build-requirements
 build-requirements: requires-REPO \
     requires-TAG \
     requires-IMAGE \
     requires-BASE_IMAGE \
     requires-SOME_VARIABLE_IN_ENV_FILE
 
+.PHONY: deploy-requirements
 deploy-requirements: requires-REPO \
     requires-TAG \
     requires-IMAGE
