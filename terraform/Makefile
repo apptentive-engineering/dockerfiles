@@ -24,8 +24,7 @@ $(BASE_IMAGE)-%:
 	fi;
 	$(call TRACE, [$(IMAGE)] - Completed '$*' for base image '$(BASE_IMAGE)')
 
-.PHONY: all
-all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
+all: build deploy | all-requirements  ## Build and deploy image created from Dockerfile.
 
 build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')

@@ -15,8 +15,7 @@ endif
 
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
 
-.PHONY: all
-all: all-requirements build deploy  ## Build and deploy image created from Dockerfile.
+all: build deploy | all-requirements  ## Build and deploy image created from Dockerfile.
 
 build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')
