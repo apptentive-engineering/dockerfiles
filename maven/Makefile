@@ -45,7 +45,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image f
 		--build-arg ALPINE_MAVEN_PACKAGE_NAME=$(ALPINE_MAVEN_PACKAGE_NAME) \
 		--build-arg ALPINE_MAVEN_PACKAGE_VERSION=$(ALPINE_MAVEN_PACKAGE_VERSION) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
+	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean

@@ -42,7 +42,7 @@ build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 		--build-arg INIT_VERSION=$(INIT_VERSION) \
 		--build-arg MAINTAINER=$(MAINTAINER) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
+	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean

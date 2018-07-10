@@ -46,7 +46,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image f
 		--build-arg SCALA_VERSION=$(SCALA_VERSION) \
 		--build-arg SBT_VERSION=$(SBT_VERSION) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
+	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean

@@ -45,7 +45,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
 		--build-arg TERRAFORM_SHA256=$(TERRAFORM_SHA256) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
+	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean

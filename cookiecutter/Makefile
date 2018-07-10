@@ -43,7 +43,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
 		--build-arg COOKIECUTTER_VERSION=$(COOKIECUTTER_VERSION) \
 		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > build && touch -t $(BUILD_TS_TOUCH) build
+	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean
