@@ -22,6 +22,7 @@ $(BASE_IMAGE)-%:
 	@if [ "$*" = "build" ]; then \
 		echo $(REPO)/$(BASE_IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@; \
 	fi;
+	$(call TRACE, [$(IMAGE)] - Completed '$*' for base image '$(BASE_IMAGE)')
 
 .PHONY: all
 all: all-requirements $(BUILD) build $(DEPLOY) deploy  ## Build and deploy image created from Dockerfile.
