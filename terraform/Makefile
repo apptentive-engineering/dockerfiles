@@ -34,6 +34,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--force-rm \
 		--cache-from $(REPO)/$(IMAGE):latest \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
+		--tag $(REPO)/$(IMAGE):$(TERRAFORM_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--label $(LABEL_PREFIX).repo=$(REPO) \
 		--label $(LABEL_PREFIX).image=$(IMAGE) \
