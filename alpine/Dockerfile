@@ -2,9 +2,9 @@
 #
 # Base Dockerfile for Alpine Linux based images.
 ARG BASE_IMAGE
-ARG TAG=latest
+ARG BASE_IMAGE_TAG=latest
 
-FROM $BASE_IMAGE:$TAG
+FROM $BASE_IMAGE:$BASE_IMAGE_TAG
 
 ARG USR
 ARG GRP

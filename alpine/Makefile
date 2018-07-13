@@ -31,6 +31,7 @@ build: $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
 		--label $(LABEL_PREFIX).image.base=$(BASE_IMAGE) \
 		--build-arg LABEL_PREFIX=$(LABEL_PREFIX) \
 		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
+		--build-arg BASE_IMAGE_TAG=$(BASE_IMAGE_TAG) \
 		--build-arg USR=$(USR) \
 		--build-arg GRP=$(GRP) \
 		--build-arg UID=$(UID) \
