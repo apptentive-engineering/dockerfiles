@@ -4,7 +4,14 @@
 
 # Stage: Build
 # Image responsible for pulling down and validating a precompiled Terraform binary.
-FROM alpine:latest as build
+ARG BUILD_BASE_IMAGE
+ARG BUILD_TAG=latest
+
+ARG REPO
+ARG BASE_IMAGE
+ARG TAG=latest
+
+FROM $BUILD_BASE_IMAGE:$BUILD_TAG as build
 
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
@@ -24,13 +31,15 @@ RUN apk add --update curl openssh && \
 # Stage: Runtime
 # Image responsible for running a Terraform binary.
 # TODO: Unsure how to parameterize a FROM statement with ARG in a multi-stage build.
-FROM ahawker/alpine:latest as runtime
+FROM $REPO/$BASE_IMAGE:$TAG as runtime
 
 ARG LABEL_PREFIX
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
 
-RUN test -n "$LABEL_PREFIX"
+RUN test -n "$LABEL_PREFIX" && \
+    test -n "$TERRAFORM_VERSION" && \
+    test -n "$TERRAFORM_SHA256"
 
 LABEL $LABEL_PREFIX.terraform.version=$TERRAFORM_VERSION
 
@@ -44,6 +53,3 @@ RUN apk add --update ca-certificates
 USER $USER
 
 COPY --from=build /bin/terraform /usr/local/bin/terraform
-
-VOLUME ["/app"]
-WORKDIR "/app"

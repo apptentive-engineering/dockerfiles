@@ -43,6 +43,8 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
 		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
+		--build-arg BUILD_BASE_IMAGE=$(BUILD_BASE_IMAGE) \
+		--build-arg BUILD_TAG=$(BUILD_TAG) \
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
 		--build-arg TERRAFORM_SHA256=$(TERRAFORM_SHA256) \
 		.
