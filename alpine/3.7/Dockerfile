@@ -1,8 +1,8 @@
 # dockerfiles/alpine
 #
-# Base Dockerfile for Alpine Linux based images.
+# Dockerfile for Alpine Linux 3.7 images
 ARG BASE_IMAGE
-ARG BASE_IMAGE_TAG=latest
+ARG BASE_IMAGE_TAG
 
 FROM $BASE_IMAGE:$BASE_IMAGE_TAG
 
@@ -16,6 +16,7 @@ ARG BUILD_TS
 ARG INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
+ARG ALPINE_VERSION
 
 RUN test -n "$USR" && \
     test -n "$GRP" && \
@@ -26,13 +27,15 @@ RUN test -n "$USR" && \
     test -n "$BUILD_TS" && \
     test -n "$INIT_VERSION" && \
     test -n "$MAINTAINER" && \
-    test -n "$LABEL_PREFIX"
+    test -n "$LABEL_PREFIX" && \
+    test -n "$ALPINE_VERSION"
 
 LABEL $LABEL_PREFIX.commit=$COMMIT \
       $LABEL_PREFIX.build.id=$BUILD_ID \
       $LABEL_PREFIX.build.ts=$BUILD_TS \
       $LABEL_PREFIX.init.version=$INIT_VERSION \
-      $LABEL_PREFIX.maintainer=$MAINTAINER
+      $LABEL_PREFIX.maintainer=$MAINTAINER \
+      $LABEL_PREFIX.alpine.version=$ALPINE_VERSION
 
 ENV USER=$USR \
     GROUP=$GRP \
@@ -44,6 +47,7 @@ ENV USER=$USR \
     INIT_VERSION=$INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
+    ALPINE_VERSION=$ALPINE_VERSION \
     LANG=C.UTF-8
 
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
