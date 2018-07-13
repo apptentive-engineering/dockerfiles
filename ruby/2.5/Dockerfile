@@ -1,6 +1,6 @@
-# dockerfiles/ruby/2.4
+# dockerfiles/ruby/2.5
 #
-# Dockerfile for Ruby 2.4.
+# Dockerfile for Ruby 2.5.
 ARG REPO
 ARG BASE_IMAGE
 ARG TAG=latest
