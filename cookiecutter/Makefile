@@ -35,6 +35,8 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(COOKIECUTTER_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
+		--label $(LABEL_PREFIX).repo=$(REPO) \
+		--label $(LABEL_PREFIX).tag=$(TAG) \
 		--label $(LABEL_PREFIX).image=$(IMAGE) \
 		--label $(LABEL_PREFIX).image.base=$(BASE_IMAGE) \
 		--build-arg LABEL_PREFIX=$(LABEL_PREFIX) \

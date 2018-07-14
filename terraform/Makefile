@@ -36,9 +36,9 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--tag $(REPO)/$(IMAGE):$(TERRAFORM_VERSION) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--label $(LABEL_PREFIX).repo=$(REPO) \
-		--label $(LABEL_PREFIX).image=$(IMAGE) \
 		--label $(LABEL_PREFIX).tag=$(TAG) \
-		--label $(LABEL_PREFIX).base_image=$(BASE_IMAGE) \
+		--label $(LABEL_PREFIX).image=$(IMAGE) \
+		--label $(LABEL_PREFIX).image.base=$(BASE_IMAGE) \
 		--build-arg LABEL_PREFIX=$(LABEL_PREFIX) \
 		--build-arg REPO=$(REPO) \
 		--build-arg TAG=$(TAG) \
