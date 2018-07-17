@@ -42,6 +42,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image fr
 		--cache-from $(REPO)/$(IMAGE):latest \
 		--tag $(REPO)/$(IMAGE):$(TAG) \
 		--tag $(REPO)/$(IMAGE):$(JAVA_VERSION) \
+		--tag $(REPO)/$(IMAGE):$(BUILD_ID) \
 		--tag $(REPO)/$(IMAGE):latest \
 		--label $(LABEL_PREFIX).repo=$(REPO) \
 		--label $(LABEL_PREFIX).tag=$(TAG) \
@@ -72,6 +73,7 @@ deploy: build $(BASE_IMAGE)-deploy | deploy-requirements  ## Deploy image built 
 	$(call TRACE, [$(IMAGE)] - Running '$@')
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(JAVA_VERSION)
+	@docker push $(REPO)/$(IMAGE):$(BUILD_ID)
 	@docker push $(REPO)/$(IMAGE):latest
 	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
