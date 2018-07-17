@@ -6,7 +6,7 @@ ifneq ($(strip $(wildcard $(ENVFILE))),)
 	export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
-export DOCKERFILES_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+export DOCKERFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
 ifneq ($(strip $(wildcard $(LOGGERFILE))),)
@@ -25,7 +25,7 @@ endif
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export TAG ?= $(COMMIT)-$(BUILD_TS)-$(BUILD_ID)
 
-SUBDIRS := $(shell find . -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
+SUBDIRS := $(shell find -L . -not -path '*/\.*' -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
 CLEAN = $(SUBDIRS:%=%-clean)
