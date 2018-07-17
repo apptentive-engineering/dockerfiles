@@ -14,7 +14,9 @@ ifneq ($(strip $(wildcard $(ENVFILE))),)
 	export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
-export DOCKERFILES_DIR ?= ..
+ifndef DOCKERFILES_DIR
+$(error Required variable 'DOCKERFILES_DIR' not set)
+endif
 
 LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
 ifneq ($(strip $(wildcard $(LOGGERFILE))),)
@@ -36,7 +38,7 @@ all: build deploy | all-requirements  ## Build and deploy image created from Doc
 
 build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')
-	docker build \
+	@docker build \
 		--rm \
 		--force-rm \
 		--cache-from $(REPO)/$(IMAGE):latest \

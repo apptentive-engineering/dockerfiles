@@ -6,7 +6,9 @@ ifneq ($(strip $(wildcard $(ENVFILE))),)
 	export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
-export DOCKERFILES_DIR ?= ..
+ifndef DOCKERFILES_DIR
+$(error Required variable 'DOCKERFILES_DIR' not set)
+endif
 
 LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
 ifneq ($(strip $(wildcard $(LOGGERFILE))),)
