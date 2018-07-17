@@ -25,7 +25,7 @@ endif
 export COMMIT ?= $(shell git rev-parse --short HEAD)
 export TAG ?= $(COMMIT)-$(BUILD_TS)-$(BUILD_ID)
 
-SUBDIRS := $(shell find -L . -not -path '*/\.*' -mindepth 2 -type f -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
+SUBDIRS := $(shell find -L . -mindepth 2 -type f -not -path '*/\.*' -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
 ALL = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
 CLEAN = $(SUBDIRS:%=%-clean)
