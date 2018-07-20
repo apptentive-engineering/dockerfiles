@@ -59,6 +59,7 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image f
 		--build-arg BUILD_TAG=$(BUILD_TAG) \
 		--build-arg GOLANG_VERSION=$(GOLANG_VERSION) \
 		--build-arg GOPATH=$(GOPATH) \
+		--build-arg GOROOT=$(GOROOT) \
 		--file $(COMMON_DIR)/Dockerfile \
 		.
 	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
@@ -89,7 +90,9 @@ build-requirements: requires-REPO \
 	requires-TAG \
 	requires-IMAGE \
 	requires-BASE_IMAGE \
-	requires-GOLANG_VERSION
+	requires-GOLANG_VERSION \
+	requires-GOPATH \
+	requires-GOROOT
 
 .PHONY: clean-requirements
 clean-requirements: requires-IMAGE \

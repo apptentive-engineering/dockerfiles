@@ -23,21 +23,26 @@ FROM $REPO/$BASE_IMAGE:$TAG as runtime
 ARG LABEL_PREFIX
 ARG GOLANG_VERSION
 ARG GOPATH
+ARG GOROOT
 
 RUN test -n "$LABEL_PREFIX" && \
     test -n "$GOLANG_VERSION" && \
-    test -n "$GOPATH"
+    test -n "$GOPATH" && \
+    test -n "$GOROOT"
 
 LABEL $LABEL_PREFIX.golang.version=$GOLANG_VERSION
 
 ENV GOLANG_VERSION=$GOLANG_VERSION \
-    GOPATH=$GOPATH
+    GOPATH=$GOPATH \
+    GOROOT=$GOROOT
 
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
 
-COPY --from=build /usr/local/go/bin /usr/local/bin
+COPY --from=build /usr/local/go /usr/local/go
 
 USER root
+
+RUN apk add --no-cache git
 
 RUN [ ! -e /etc/nsswitch.conf ] && echo "hosts: files dns" > /etc/nsswitch.conf
 
