@@ -252,7 +252,6 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements
 
 clean: $(BASE_IMAGE)-clean | clean-requirements
 
-.PHONY: deploy
 deploy: build $(BASE_IMAGE)-deploy | deploy-requirements
     ...
 ```
