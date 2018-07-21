@@ -295,7 +295,6 @@ PACKAGE_VERSION=1.2.3
 
 ## Open Questions
 
-* How to handle reuse of `Dockerfile`/`Makefile` combinations with multiple .env files? (Many to One)
 * How to support a `BASE_IMAGE` that is not locally defined?
 
 ## Open Documentation Items
