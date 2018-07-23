@@ -1,1 +1,1 @@
-../../.common/Makefile
+../../.common/Image.make

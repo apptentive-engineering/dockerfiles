@@ -1,4 +1,15 @@
+# Image.make
+#
+# Generic Makefile symlinked into image directories for recursive building child directories.
 .DEFAULT_GOAL := help
+
+IMAGE_COMMON_DIR := $(shell pwd)/.common
+
+IMAGE_COMMON_ENVFILE ?= $(IMAGE_COMMON_DIR)/.env
+ifneq ($(strip $(wildcard $(IMAGE_COMMON_ENVFILE))),)
+	include $(IMAGE_COMMON_ENVFILE)
+	export $(shell sed 's/=.*//' $(IMAGE_COMMON_ENVFILE))
+endif
 
 ENVFILE ?= .env
 ifneq ($(strip $(wildcard $(ENVFILE))),)
