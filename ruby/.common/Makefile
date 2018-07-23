@@ -60,6 +60,8 @@ build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements   ## Build image f
 		--build-arg BUNDLER_VERSION=$(BUNDLER_VERSION) \
 		--build-arg ALPINE_RUBY_PACKAGE_NAME=$(ALPINE_RUBY_PACKAGE_NAME) \
 		--build-arg ALPINE_RUBY_PACKAGE_VERSION=$(ALPINE_RUBY_PACKAGE_VERSION) \
+		--build-arg ALPINE_RUBY_JSON_PACKAGE_NAME=$(ALPINE_RUBY_JSON_PACKAGE_NAME) \
+		--build-arg ALPINE_RUBY_IRB_PACKAGE_NAME=$(ALPINE_RUBY_IRB_PACKAGE_NAME) \
 		--file $(COMMON_DIR)/Dockerfile \
 		.
 	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
@@ -95,7 +97,9 @@ build-requirements: requires-REPO \
 	requires-GEMS_VERSION \
 	requires-BUNDLER_VERSION \
 	requires-ALPINE_RUBY_PACKAGE_NAME \
-	requires-ALPINE_RUBY_PACKAGE_VERSION
+	requires-ALPINE_RUBY_PACKAGE_VERSION \
+	requires-ALPINE_RUBY_JSON_PACKAGE_NAME \
+	requires-ALPINE_RUBY_IRB_PACKAGE_NAME
 
 .PHONY: clean-requirements
 clean-requirements: requires-IMAGE \
