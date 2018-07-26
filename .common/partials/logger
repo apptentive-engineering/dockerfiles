@@ -1,3 +1,7 @@
+# .common/partials/logger
+#
+# Makefile partial for adding "logger" like functions.
+
 DEFAULT= \033[0;39m
 RED=\033[1;31m
 GREEN=\033[1;32m
