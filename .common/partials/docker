@@ -1,0 +1,32 @@
+# .common/partials/docker
+#
+# Makefile partial for docker related functionality.
+
+# Translate the args, labels, and tags lists into their appropriate `docker build` command line params.
+# For example, if $(TAGS) is foo bar baz, $(DOCKER_TAGS) will be "--tag foo --tag bar --tag baz".
+$(eval DOCKER_ARGS := $(shell set -- $(GLOBAL_ARGS) $(ARGS) && echo "$${@/#/--build-arg }"))
+$(eval DOCKER_LABELS := $(shell set -- $(GLOBAL_LABELS) $(LABELS) && echo "$${@/#/--label }"))
+$(eval DOCKER_TAGS := $(shell set -- $(GLOBAL_TAGS) $(TAGS) && echo "$${@/#/--tag }"))
+
+# Invoke `docker build` using the current make context.
+DOCKER_BUILD = \
+	@docker build \
+		--rm \
+		--force-rm \
+		--cache-from $(IMAGE):latest \
+		$(DOCKER_ARGS) \
+		$(DOCKER_LABELS) \
+		$(DOCKER_TAGS) \
+		--file $(shell pwd)/Dockerfile \
+		.
+
+# Invoke `docker system prune` to remove old images using the current make context.
+DOCKER_CLEAN = \
+	@docker system prune \
+		--all \
+		--force \
+		--filter "label=$(LABEL_PREFIX).image=$(IMAGE)" \
+		--filter "until=$(BUILD_TS)"
+
+# Invoke `docker push` for all tags in the current make context.
+DOCKER_DEPLOY = @for tag in $(GLOBAL_TAGS) $(TAGS) ; do docker push $$tag ; done
