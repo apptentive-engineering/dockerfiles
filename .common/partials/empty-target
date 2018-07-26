@@ -1,0 +1,17 @@
+# .common/partials/empty-target
+#
+# Makefile partial for dealing with "empty targets". An empty target is just a marker file
+# that matches the name of a target within the Makefile that has a specific last-modified time value set
+# so it's known when to re-evaluate.
+
+# Create a new empty target file using the current make context.
+EMPTY_TARGET_CREATE = @echo $(REPO)/$(IMAGE):$(TAG) > $(1) && touch -t $(BUILD_TS_TOUCH) $(1)
+
+# Create a new empty target file using the current make context for a base image.
+EMPTY_TARGET_BASE_CREATE = 	\
+	@if [ "$(1)" != "clean" ]; then \
+		echo $(REPO)/$(BASE_IMAGE):$(TAG) > $(2) && touch -t $(BUILD_TS_TOUCH) $(2); \
+	fi;
+
+# Remove existing empty target files based on known make context patterns.
+EMPTY_TARGET_CLEAN = @rm *build > /dev/null 2>&1 || true
