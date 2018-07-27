@@ -13,5 +13,8 @@ EMPTY_TARGET_BASE_CREATE = 	\
 		echo $(REPO)/$(BASE_IMAGE):$(TAG) > $(2) && touch -t $(BUILD_TS_TOUCH) $(2); \
 	fi;
 
-# Remove existing empty target files based on known make context patterns.
-EMPTY_TARGET_CLEAN = @rm *build > /dev/null 2>&1 || true
+# Remove existing empty target files created from build targets.
+EMPTY_TARGET_CLEAN_BUILD = @rm *build > /dev/null 2>&1 || true
+
+# Remove existing empty target files created from deploy targets.
+EMPTY_TARGET_CLEAN_DEPLOY = @rm *deploy > /dev/null 2>&1 || true
