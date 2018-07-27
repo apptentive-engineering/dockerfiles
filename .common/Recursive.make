@@ -1,77 +1,101 @@
-# Image.make
+# Recursive.make
 #
-# Generic Makefile symlinked into image directories for recursive building child directories.
+# Gemeric Makefile responsible for recursiving creating targets for all subdirectories.
 .DEFAULT_GOAL := help
 
-IMAGE_COMMON_DIR := $(shell pwd)/.common
+.SUFFIXES:
 
-IMAGE_COMMON_ENVFILE ?= $(IMAGE_COMMON_DIR)/.env
-ifneq ($(strip $(wildcard $(IMAGE_COMMON_ENVFILE))),)
-	include $(IMAGE_COMMON_ENVFILE)
-	export $(shell sed 's/=.*//' $(IMAGE_COMMON_ENVFILE))
+# Load the common root .env file into the current make context if one exists.
+ROOT_COMMON_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+ROOT_COMMON_ENVFILE := $(ROOT_COMMON_DIR)/.env
+ifneq ($(strip $(wildcard $(ROOT_COMMON_ENVFILE))),)
+include $(ROOT_COMMON_ENVFILE)
+export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
 endif
 
+# Load the common parent .env file into the current make context if one exists.
+# This is only necessary for when child targets are invoked directly instead of using
+# the parent/recursive targets.
+PARENT_COMMON_DIR := $(shell pwd | xargs dirname)/.common
+PARENT_COMMON_ENVFILE := $(PARENT_COMMON_DIR)/.env
+ifneq ($(strip $(wildcard $(PARENT_COMMON_ENVFILE))),)
+include $(PARENT_COMMON_ENVFILE)
+export $(shell sed 's/=.*//' $(PARENT_COMMON_ENVFILE))
+endif
+
+# Load the local .env file into the current make context if one exists.
 ENVFILE ?= .env
 ifneq ($(strip $(wildcard $(ENVFILE))),)
-	include $(ENVFILE)
-	export $(shell sed 's/=.*//' $(ENVFILE))
+include $(ENVFILE)
+export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
+# Load the root .partials files into the current make context if they exist.
+# This should always happen after loading all necessary .env files so the partials
+# have access to the most up-to-date make context.
+ROOT_COMMON_PARTIALS_DIR ?= $(ROOT_COMMON_DIR)/partials
+ifneq ($(strip $(wildcard $(ROOT_COMMON_PARTIALS_DIR))),)
+include $(ROOT_COMMON_PARTIALS_DIR)/*
+endif
+
+# Validate existence of core variables required for virtually all actions.
 ifndef DOCKERFILES_DIR
 $(error Required variable 'DOCKERFILES_DIR' not set)
 endif
-
-LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
-ifneq ($(strip $(wildcard $(LOGGERFILE))),)
-	include $(LOGGERFILE)
+ifndef BUILD_ID
+$(error Required variable 'BUILD_ID' not set)
+endif
+ifndef BUILD_TS
+$(error Required variable 'BUILD_TS' not set)
+endif
+ifndef BUILD_TS_TOUCH
+$(error Required variable 'BUILD_TS_TOUCH' not set)
 endif
 
-DIR := $(shell pwd | perl -nle 'print $$& if m{^$(DOCKERFILES_DIR)/\K.*}')
-SUBDIRS := $(shell find -L . -mindepth 2 -type f -not -path '*/\.*' -name 'Makefile' | sed -E "s|/[^/]+$$||" | sed "s|^\./||")
-ALL = $(SUBDIRS:%=%-all)
+ALL_ = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
 CLEAN = $(SUBDIRS:%=%-clean)
 DEPLOY = $(SUBDIRS:%=%-deploy)
 
 .PHONY: all
-all: $(ALL)  ## Run recursive 'make all' to build and deploy all images.
-	$(call TRACE, [$(DIR)] - Recursive '$@' complete)
+all: $(ALL)  ## Run recursive 'make all' to build an deploy all images.
+	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
 .PHONY: build
 build: $(BUILD)  ## Run recursive 'make build' to build all images.
-	$(call TRACE, [$(DIR)] - Recursive '$@' complete)
+	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
 .PHONY: clean
 clean: $(CLEAN)  ## Run recursive 'make clean' to clean all images.
-	$(call TRACE, [$(DIR)] - Recursive '$@' complete)
+	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
 .PHONY: deploy
 deploy: $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
-	$(call TRACE, [$(DIR)] - Recursive '$@' complete)
+	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
 .PHONY: $(ALL)
 $(ALL):
-	$(call TRACE, [$(DIR)] - Running 'all' for child image '$(@:%-all=%)')
+	$(call TRACE, [$(DIRNAME)] - Running 'all' for child image '$(@:%-all=%)')
 	@$(MAKE) -C $(@:%-all=%) all
-	$(call TRACE, [$(DIR)] - Completed 'all' for child image '$(@:%-all=%)')
+	$(call TRACE, [$(DIRNAME)] - Completed 'all' for child image '$(@:%-all=%)')
 
 .PHONY: $(BUILD)
 $(BUILD):
-	$(call TRACE, [$(DIR)] - Running 'build' for child image '$(@:%-build=%)')
+	$(call TRACE, [$(DIRNAME)] - Running 'build' for child image '$(@:%-build=%)')
 	@$(MAKE) -C $(@:%-build=%) build
-	$(call TRACE, [$(DIR)] - Completed 'build' for child image '$(@:%-build=%)')
+	$(call TRACE, [$(DIRNAME)] - Completed 'build' for child image '$(@:%-build=%)')
 
 .PHONY: $(CLEAN)
 $(CLEAN):
-	$(call TRACE, [$(DIR)] - Running 'clean' for child image '$(@:%-clean=%)')
+	$(call TRACE, [$(DIRNAME)] - Running 'clean' for child image '$(@:%-clean=%)')
 	@$(MAKE) -C $(@:%-clean=%) clean
-	$(call TRACE, [$(DIR)] - Completed 'clean' for child image '$(@:%-clean=%)')
+	$(call TRACE, [$(DIRNAME)] - Completed 'clean' for child image '$(@:%-clean=%)')
 
 .PHONY: $(DEPLOY)
 $(DEPLOY):
-	$(call TRACE, [$(DIR)] - Running 'deploy' for child image '$(@:%-deploy=%)')
+	$(call TRACE, [$(DIRNAME)] - Running 'deploy' for child image '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
-	$(call TRACE, [$(DIR)] - Completed 'deploy' for child image '$(@:%-deploy=%)')
+	$(call TRACE, [$(DIRNAME)] - Completed 'deploy' for child image '$(@:%-deploy=%)')
 
 .PHONY: help
 help: ## Print Makefile usage.
