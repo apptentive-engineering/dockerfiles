@@ -4,6 +4,7 @@
 
 # Stage: Build
 # Image responsible for pulling down and validating a precompiled Terraform binary.
+ARG BUILD_REPO
 ARG BUILD_BASE_IMAGE
 ARG BUILD_TAG=latest
 
@@ -11,7 +12,7 @@ ARG REPO
 ARG BASE_IMAGE
 ARG TAG=latest
 
-FROM $BUILD_BASE_IMAGE:$BUILD_TAG as build
+FROM $BUILD_REPO/$BUILD_BASE_IMAGE:$BUILD_TAG as build
 
 ARG TERRAFORM_VERSION
 ARG TERRAFORM_SHA256
