@@ -73,6 +73,10 @@ clean: $(CLEAN)  ## Run recursive 'make clean' to clean all images.
 deploy: $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
 	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	@$(MAKE) -C $@
+
 .PHONY: $(ALL)
 $(ALL):
 	$(call TRACE, [$(DIRNAME)] - Running 'all' for child image '$(@:%-all=%)')
