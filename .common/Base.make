@@ -111,7 +111,7 @@ build-requirements: $(BUILD_REQUIREMENTS)
 clean-requirements: $(CLEAN_REQUIREMENTS)
 
 .PHONY: deploy-requirements
-deploy-requirements: $(DEPLOY_REQUIREMENTS)
+deploy-requirements: build-requirements $(DEPLOY_REQUIREMENTS)
 
 requires-%:
 	@if [ -z '${${*}}' ]; then echo 'Required variable "$*" not set' && exit 1; fi
