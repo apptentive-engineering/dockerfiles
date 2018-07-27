@@ -1,6 +1,6 @@
 # dockerfiles/sbt
 #
-# Dockerfile for a Java 8 Scala development environment.
+# Dockerfile for SBT (https://www.scala-sbt.org/)
 ARG REPO
 ARG BASE_IMAGE
 ARG TAG=latest
@@ -9,7 +9,7 @@ FROM $REPO/$BASE_IMAGE:$TAG
 
 ARG LABEL_PREFIX
 ARG SBT_VERSION
-ARG SBT_DIR=/opt/sbt
+ARG SBT_DIR
 
 RUN test -n "$LABEL_PREFIX" && \
     test -n "$SBT_VERSION" && \
