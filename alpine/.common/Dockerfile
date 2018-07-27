@@ -17,6 +17,8 @@ ARG INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
 ARG ALPINE_VERSION
+ARG ALPINE_CA_CERTIFICATES_PACKAGE_NAME
+ARG ALPINE_CA_CERTIFICATES_PACKAGE_VERSION
 
 RUN test -n "$USR" && \
     test -n "$GRP" && \
@@ -28,7 +30,9 @@ RUN test -n "$USR" && \
     test -n "$INIT_VERSION" && \
     test -n "$MAINTAINER" && \
     test -n "$LABEL_PREFIX" && \
-    test -n "$ALPINE_VERSION"
+    test -n "$ALPINE_VERSION" && \
+    test -n "$ALPINE_CA_CERTIFICATES_PACKAGE_NAME" && \
+    test -n "$ALPINE_CA_CERTIFICATES_PACKAGE_VERSION"
 
 LABEL $LABEL_PREFIX.commit=$COMMIT \
       $LABEL_PREFIX.build.id=$BUILD_ID \
@@ -48,9 +52,11 @@ ENV USER=$USR \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
     ALPINE_VERSION=$ALPINE_VERSION \
+    ALPINE_CA_CERTIFICATES_PACKAGE_NAME=$ALPINE_CA_CERTIFICATES_PACKAGE_NAME \
+    ALPINE_CA_CERTIFICATES_PACKAGE_VERSION=$ALPINE_CA_CERTIFICATES_PACKAGE_VERSION \
     LANG=C.UTF-8
 
-RUN apk add --no-cache ca-certificates && \
+RUN apk add --no-cache $ALPINE_CA_CERTIFICATES_PACKAGE_NAME="$ALPINE_CA_CERTIFICATES_PACKAGE_VERSION" && \
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
     chmod +x /usr/local/bin/dumb-init
 
