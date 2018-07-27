@@ -1,1 +1,1 @@
-../../.common/Version.make
+../../.common/Base.make
