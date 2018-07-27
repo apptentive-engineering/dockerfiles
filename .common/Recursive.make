@@ -56,6 +56,7 @@ ALL_ = $(SUBDIRS:%=%-all)
 BUILD = $(SUBDIRS:%=%-build)
 CLEAN = $(SUBDIRS:%=%-clean)
 DEPLOY = $(SUBDIRS:%=%-deploy)
+TEST = $(SUBDIRS:%=%-test)
 
 .PHONY: all
 all: $(ALL)  ## Run recursive 'make all' to build an deploy all images.
@@ -71,6 +72,10 @@ clean: $(CLEAN)  ## Run recursive 'make clean' to clean all images.
 
 .PHONY: deploy
 deploy: $(DEPLOY)  ## Run recursive 'make deploy' to deploy all images.
+	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
+
+.PHONY: test
+test: $(TEST)  ## Run recursive 'make test' to test all images.
 	$(call TRACE, [$(DIRNAME)] - Recursive '$@' complete)
 
 .PHONY: $(SUBDIRS)
@@ -100,6 +105,12 @@ $(DEPLOY):
 	$(call TRACE, [$(DIRNAME)] - Running 'deploy' for child image '$(@:%-deploy=%)')
 	@$(MAKE) -C $(@:%-deploy=%) deploy
 	$(call TRACE, [$(DIRNAME)] - Completed 'deploy' for child image '$(@:%-deploy=%)')
+
+.PHONY: $(TEST)
+$(TEST):
+	$(call TRACE, [$(DIRNAME)] - Running 'test' for child image '$(@:%-test=%)')
+	@$(MAKE) -C $(@:%-test=%) test
+	$(call TRACE, [$(DIRNAME)] - Completed 'test' for child image '$(@:%-test=%)')
 
 .PHONY: help
 help: ## Print Makefile usage.

@@ -1,0 +1,14 @@
+# .common/partials/hadolint
+#
+# Makefile partial for hadolint related functionality.
+
+HADOLINT_REPO := hadolint
+HADOLINT_IMAGE := $(HADOLINT_REPO)/hadolint
+HADOLINT_TAG := latest
+
+# Invoke `hadolint` against a Dockerfile to lint/validate it.
+HADOLINT = \
+	@docker run \
+		--rm \
+		--interactive \
+		$(HADOLINT_IMAGE):$(HADOLINT_TAG) < Dockerfile
