@@ -10,8 +10,6 @@ addons:
     - docker-ce
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-install:
-- make
 before_script:
 - sleep 2  # Hack to guarantee BUILD_TS is newer than `git checkout` last-modified timestamp.
 - export BUILD_ID=$TRAVIS_BUILD_ID
