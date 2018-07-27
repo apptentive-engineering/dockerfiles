@@ -1,1 +1,1 @@
-.common/Image.make
+.common/Recursive.make
