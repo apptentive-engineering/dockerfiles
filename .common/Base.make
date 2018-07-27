@@ -1,94 +1,117 @@
-# Version.make
+# Base.make
 #
-# Generic Makefile symlinked into image version directories for building from local Dockerfiles.
+# Generic Makefile symlinked into directories for building images from Dockerfiles.
+#
+# This Makefile will conditionally detect image dependencies (different dockerfile directories)
+# and appropriate include them as target prerequisites.
 .DEFAULT_GOAL := help
 
-RELATIVE_COMMON_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+.SUFFIXES:
 
-RELATIVE_COMMON_ENVFILE ?= $(RELATIVE_COMMON_DIR)/.env
-ifneq ($(strip $(wildcard $(RELATIVE_COMMON_ENVFILE))),)
-	include $(RELATIVE_COMMON_ENVFILE)
-	export $(shell sed 's/=.*//' $(RELATIVE_COMMON_ENVFILE))
+# Load the common root .env file into the current make context if one exists.
+ROOT_COMMON_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+ROOT_COMMON_ENVFILE := $(ROOT_COMMON_DIR)/.env
+ifneq ($(strip $(wildcard $(ROOT_COMMON_ENVFILE))),)
+	include $(ROOT_COMMON_ENVFILE)
+	export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
 endif
 
+# Load the common parent .env file into the current make context if one exists.
+# This is only necessary for when child targets are invoked directly instead of using
+# the parent/recursive targets.
+PARENT_COMMON_DIR := $(shell pwd | xargs dirname)/.common
+PARENT_COMMON_ENVFILE := $(PARENT_COMMON_DIR)/.env
+ifneq ($(strip $(wildcard $(PARENT_COMMON_ENVFILE))),)
+	include $(PARENT_COMMON_ENVFILE)
+	export $(shell sed 's/=.*//' $(PARENT_COMMON_ENVFILE))
+endif
+
+# Load the local .env file into the current make context if one exists.
 ENVFILE ?= .env
 ifneq ($(strip $(wildcard $(ENVFILE))),)
 	include $(ENVFILE)
 	export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
+# Load the root .partials files into the current make context if they exist.
+# This should always happen after loading all necessary .env files so the partials
+# have access to the most up-to-date make context.
+ROOT_COMMON_PARTIALS_DIR ?= $(ROOT_COMMON_DIR)/partials
+ifneq ($(strip $(wildcard $(ROOT_COMMON_PARTIALS_DIR))),)
+	include $(ROOT_COMMON_PARTIALS_DIR)/*
+endif
+
+# Validate existence of core variables required for virtually all actions.
 ifndef DOCKERFILES_DIR
 $(error Required variable 'DOCKERFILES_DIR' not set)
 endif
-
-LOGGERFILE ?= $(DOCKERFILES_DIR)/.logger
-ifneq ($(strip $(wildcard $(LOGGERFILE))),)
-	include $(LOGGERFILE)
+ifndef BUILD_ID
+$(error Required variable 'BUILD_ID' not set)
+endif
+ifndef BUILD_TS
+$(error Required variable 'BUILD_TS' not set)
+endif
+ifndef BUILD_TS_TOUCH
+$(error Required variable 'BUILD_TS_TOUCH' not set)
 endif
 
+# Generate list of files within local directory that dependencies of the 'build'. If
+# any of these files have been changed since the last-modified time on the empty target
+# file, it will trigger a rebuild.
 BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
-BASE_IMAGE_DEPS := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)" $(DOCKERFILES_DIR) | xargs dirname)
+
+# Recursively search within the dockerfiles directory looking for the build directory
+# of the base image (if one is specified/exists). If one does exist, it means there is a
+# local image that is the base of this one and it should be included as a dependency.
+BASE_IMAGE_DIR := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)$$" $(DOCKERFILES_DIR))
+ifeq ($(BASE_IMAGE_DIR),)
+BUILD_PREREQUISITES = $(BUILD_DEPS) | build-requirements
+CLEAN_PREREQUISITES = | clean-requirements
+DEPLOY_PREREQUISITES = build | deploy-requirements
+else
+BUILD_PREREQUISITES = $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements
+CLEAN_PREREQUISITES = $(BASE_IMAGE)-clean | clean-requirements
+DEPLOY_PREREQUISITES = build $(BASE_IMAGE)-deploy | deploy-requirements
 
 $(BASE_IMAGE)-%:
 	$(call TRACE, [$(IMAGE)] - Running '$*' for base image '$(BASE_IMAGE)')
-	@$(MAKE) -C $(BASE_IMAGE_DEPS) $*
-	@if [ "$*" != "clean" ]; then \
-		echo $(REPO)/$(BASE_IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@; \
-	fi;
+	@$(MAKE) -C $(shell dirname $(BASE_IMAGE_DIR)) $*
+	$(call EMPTY_TARGET_BASE_CREATE,$*,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$*' for base image '$(BASE_IMAGE)')
+endif
 
 all: build deploy | all-requirements  ## Build and deploy image created from Dockerfile.
 
-build: $(BASE_IMAGE)-build $(BUILD_DEPS) | build-requirements  ## Build image from Dockerfile.
+build: $(BUILD_PREREQUISITES)  ## Build image from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')
-	@docker build \
-		--rm \
-		--force-rm \
-		--cache-from $(IMAGE):latest \
-		$(foreach tag,$(TAGS),--tag $(tag)) \
-		$(foreach label,$(LABELS),--label $(label)) \
-		$(foreach arg,$(ARGS),--build-arg $(arg)) \
-		--file $(shell pwd)/Dockerfile \
-		.
-	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
+	$(DOCKER_BUILD)
+	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: clean
-clean: $(BASE_IMAGE)-clean | clean-requirements  ## Clean state generated by previous images built from Dockerfile.
+clean: $(CLEAN_PREREQUISITES)  ## Clean state generated by previous images built from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')
-	@rm *build > /dev/null 2>&1 || true
-	@docker system prune --all --force --filter "label=$(LABEL_PREFIX).image=$(IMAGE)" --filter "until=$(BUILD_TS)"
+	$(DOCKER_CLEAN)
+	$(EMPTY_TARGET_CLEAN)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
-deploy: build $(BASE_IMAGE)-deploy | deploy-requirements  ## Deploy image built from Dockerfile.
+deploy: $(DEPLOY_PREREQUISITES)  ## Deploy image built from Dockerfile.
 	$(call TRACE, [$(IMAGE)] - Running '$@')
-	@for tag in $(TAGS) ; do docker push $$tag ; done
-	@echo $(REPO)/$(IMAGE):$(TAG) > $@ && touch -t $(BUILD_TS_TOUCH) $@
+	$(DOCKER_DEPLOY)
+	$(call MK_EMPTY_TARGET,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 
 .PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements
 
 .PHONY: build-requirements
-build-requirements: requires-REPO \
-	requires-LABEL_PREFIX \
-	requires-TAG \
-	requires-IMAGE \
-	requires-BASE_IMAGE \
-	requires-TAGS \
-	requires-LABELS \
-	requires-ARGS
+build-requirements: $(BUILD_REQUIREMENTS)
 
 .PHONY: clean-requirements
-clean-requirements: requires-IMAGE \
-	requires-LABEL_PREFIX \
-	requires-BUILD_TS
+clean-requirements: $(CLEAN_REQUIREMENTS)
 
 .PHONY: deploy-requirements
-deploy-requirements: requires-REPO \
-	requires-TAG \
-	requires-IMAGE \
-	requires-TAGS
+deploy-requirements: $(DEPLOY_REQUIREMENTS)
 
 requires-%:
 	@if [ -z '${${*}}' ]; then echo 'Required variable "$*" not set' && exit 1; fi
