@@ -1,6 +1,6 @@
 # Recursive.make
 #
-# Gemeric Makefile responsible for recursiving creating targets for all subdirectories.
+# Gemeric Makefile responsible for recursively creating targets for all subdirectories.
 .DEFAULT_GOAL := help
 
 .SUFFIXES:
