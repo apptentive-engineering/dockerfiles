@@ -58,7 +58,7 @@ endif
 # Generate list of files within local directory that dependencies of the 'build'. If
 # any of these files have been changed since the last-modified time on the empty target
 # file, it will trigger a rebuild.
-BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' ! -iname '*deploy' ! -iname '*test' \))
+BUILD_DEPS := $(shell find -L . -type f \( -iname '*' ! -iname '*build' ! -iname '*deploy' ! -iname '*test' \))
 
 # Recursively search within the dockerfiles directory looking for the build directory
 # of the base image (if one is specified/exists). If one does exist, it means there is a
