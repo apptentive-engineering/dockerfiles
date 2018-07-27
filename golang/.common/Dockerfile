@@ -24,17 +24,23 @@ ARG LABEL_PREFIX
 ARG GOLANG_VERSION
 ARG GOPATH
 ARG GOROOT
+ARG ALPINE_GIT_PACKAGE_NAME
+ARG ALPINE_GIT_PACKAGE_VERSION
 
 RUN test -n "$LABEL_PREFIX" && \
     test -n "$GOLANG_VERSION" && \
     test -n "$GOPATH" && \
-    test -n "$GOROOT"
+    test -n "$GOROOT" && \
+    test -n "$ALPINE_GIT_PACKAGE_NAME" && \
+    test -n "$ALPINE_GIT_PACKAGE_VERSION"
 
 LABEL $LABEL_PREFIX.golang.version=$GOLANG_VERSION
 
 ENV GOLANG_VERSION=$GOLANG_VERSION \
     GOPATH=$GOPATH \
-    GOROOT=$GOROOT
+    GOROOT=$GOROOT \
+    ALPINE_GIT_PACKAGE_NAME=$ALPINE_GIT_PACKAGE_NAME \
+    ALPINE_GIT_PACKAGE_VERSION=$ALPINE_GIT_PACKAGE_VERSION
 
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
 
@@ -42,7 +48,7 @@ COPY --from=build /usr/local/go /usr/local/go
 
 USER root
 
-RUN apk add --no-cache git
+RUN apk add --no-cache $ALPINE_GIT_PACKAGE_NAME="$ALPINE_GIT_PACKAGE_VERSION"
 
 RUN [ ! -e /etc/nsswitch.conf ] && echo "hosts: files dns" > /etc/nsswitch.conf
 
