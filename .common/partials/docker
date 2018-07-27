@@ -4,9 +4,9 @@
 
 # Translate the args, labels, and tags lists into their appropriate `docker build` command line params.
 # For example, if $(TAGS) is foo bar baz, $(DOCKER_TAGS) will be "--tag foo --tag bar --tag baz".
-$(eval DOCKER_ARGS := $(shell set -- $(GLOBAL_ARGS) $(ARGS) && echo "$${@/#/--build-arg }"))
-$(eval DOCKER_LABELS := $(shell set -- $(GLOBAL_LABELS) $(LABELS) && echo "$${@/#/--label }"))
-$(eval DOCKER_TAGS := $(shell set -- $(GLOBAL_TAGS) $(TAGS) && echo "$${@/#/--tag }"))
+$(eval DOCKER_ARGS := $(shell bash -c 'set -- $(GLOBAL_ARGS) $(ARGS) && echo "$${@/#/--build-arg }"'))
+$(eval DOCKER_LABELS := $(shell bash -c 'set -- $(GLOBAL_LABELS) $(LABELS) && echo "$${@/#/--label }"'))
+$(eval DOCKER_TAGS := $(shell bash -c 'set -- $(GLOBAL_TAGS) $(TAGS) && echo "$${@/#/--tag }"'))
 
 # Invoke `docker build` using the current make context.
 DOCKER_BUILD = \
