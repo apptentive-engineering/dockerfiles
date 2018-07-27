@@ -63,7 +63,7 @@ BUILD_DEPS := $(shell find . -type f \( -iname '*' ! -iname '*build' \))
 # Recursively search within the dockerfiles directory looking for the build directory
 # of the base image (if one is specified/exists). If one does exist, it means there is a
 # local image that is the base of this one and it should be included as a dependency.
-BASE_IMAGE_DIR := $(shell grep -ril "^IMAGE=$(BASE_IMAGE)$$" $(DOCKERFILES_DIR))
+BASE_IMAGE_DIR := $(shell grep -ril "^IMAGE\s*=\s*$(BASE_IMAGE)$$" $(DOCKERFILES_DIR))
 ifeq ($(BASE_IMAGE_DIR),)
 BUILD_PREREQUISITES = $(BUILD_DEPS) | build-requirements
 CLEAN_PREREQUISITES = | clean-requirements
