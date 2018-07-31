@@ -179,7 +179,7 @@ While you may see many `Makefile` within this repository, they're all symlinks b
 An example of the symlinking nature can be seen by examining the hierarchy for the `alpine` image.
 
 ```bash
-$ tree -a alpine
+⇒  tree -a alpine .common
 alpine
 ├── .common
 │   ├── .env
@@ -198,6 +198,10 @@ alpine
 │   ├── Dockerfile -> ../.common/Dockerfile
 │   └── Makefile -> ../.common/Makefile
 └── Makefile -> ../.common/Recursive.make
+.common
+├── .env
+├── Base.make
+├── Recursive.make
 ```
 
 The version-specific `Makefile` symlinks back to the `.common` copy which is a symlink to the root directory `.common/Base.make` while the `Makefile` in the `alpine` directory is a symlink to the root directory `.common/Recursive.make`.
