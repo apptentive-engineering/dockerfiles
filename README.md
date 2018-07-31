@@ -206,6 +206,10 @@ alpine
 
 The version-specific `Makefile` symlinks back to the `.common` copy which is a symlink to the root directory `.common/Base.make` while the `Makefile` in the `alpine` directory is a symlink to the root directory `.common/Recursive.make`.
 
+#### Partials
+
+There is a directory named `partials` within the root `.common` directory that contains files that are automatically loaded by both the `Base.make` and `Recursive.make` files. Files within the `partials` directory are small snippets of `Makefile` code that are included into the others as a means of writing re-usable code between the two files.
+
 ### .env
 
 Optional `.env` file(s) can be placed in stratgic locations within the directory structure to define values that are passed to the `Makefile` and potentially `Dockerfile`. The structure of a `.env` file is just a `Makefile` partial and commonly appears as:
