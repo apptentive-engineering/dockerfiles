@@ -92,7 +92,7 @@ Based on how the `make help` usage output is created, the recursive targets auto
 
 As you can see, the `python` example includes subdirectories at depth+1 beyond that of the `alpine` images. The pattern will hold for invoking targets of subdirectories to _any_ depth.
 
-However let's say you don't want to build just `alpine3.7` but all `alpine` images within the repository. You can simplely invoke the same targets on the parent directory and it will recursively invoke them for all subdirectories. For example:
+However let's say you don't want to build just `alpine3.7` but all `alpine` images within the repository. You can simply invoke the same targets on the parent directory and it will recursively invoke them for all subdirectories. For example:
 
 * `make alpine-build` - Recursively builds all available `alpine` images.
 * `make python/2-build` - Recursively builds all avialable `python2` images.
@@ -200,7 +200,7 @@ alpine
 └── Makefile -> ../.common/Recursive.make
 ```
 
-The version-specific `Makefile` symlink back to the `.common` copy which is a symlink to the root directory `.common/Base.make` while the `Makefile` in the `alpine` directory is a symlink to the root directory `.common/Recursive.make`.
+The version-specific `Makefile` symlinks back to the `.common` copy which is a symlink to the root directory `.common/Base.make` while the `Makefile` in the `alpine` directory is a symlink to the root directory `.common/Recursive.make`.
 
 ### .env
 
