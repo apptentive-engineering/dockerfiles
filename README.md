@@ -73,26 +73,26 @@ That's just the default target, `help`. Let's specify one by invoking the `build
 ```bash
 $ make alpine/3.7-build
 [TRACE] - [dockerfiles] - Running 'build' for child image 'alpine/3.7'
-[TRACE] - [alpine3.7] - Running 'build'
+[TRACE] - [alpine-3.7] - Running 'build'
 Sending build context to Docker daemon  9.216kB
 ...
 ...
 Successfully built 57642cb07bbe
 Successfully tagged ahawker/alpine:6cdaa04-1531262409-2704231498
 Successfully tagged ahawker/alpine:latest
-[TRACE] - [alpine3.7] - Completed 'build'
+[TRACE] - [alpine-3.7] - Completed 'build'
 [TRACE] - [dockerfiles] - Completed 'build' for child image 'alpine/3.7'
 ```
 
 Based on how the `make help` usage output is created, the recursive targets automatically created from subdirectories will _not_ appear. However, they all follow the same simple pattern of `<directory-path>-<makefile-target-name>`. Let's walk through a few examples:
 
-* `make alpine/3.7-build` - Build the `alpine3.7` image.
-* `make alpine/3.7-deploy` - Deploy the `alpine3.7` image.
+* `make alpine/3.7-build` - Build the `alpine-3.7` image.
+* `make alpine/3.7-deploy` - Deploy the `alpine-3.7` image.
 * `make python/3/3.6.4-clean` - Clean artifacts for the `python3.6.4` image.
 
 As you can see, the `python` example includes subdirectories at depth+1 beyond that of the `alpine` images. The pattern will hold for invoking targets of subdirectories to _any_ depth.
 
-However let's say you don't want to build just `alpine3.7` but all `alpine` images within the repository. You can simply invoke the same targets on the parent directory and it will recursively invoke them for all subdirectories. For example:
+However let's say you don't want to build just `alpine-3.7` but all `alpine` images within the repository. You can simply invoke the same targets on the parent directory and it will recursively invoke them for all subdirectories. For example:
 
 * `make alpine-build` - Recursively builds all available `alpine` images.
 * `make python/2-build` - Recursively builds all avialable `python2` images.
@@ -113,9 +113,9 @@ This repository uses `make` as the build system. If you're not familiar with it,
 ```bash
 $ make ruby/2.4-build
 [TRACE] - [dockerfiles] - Running 'build' for child image 'ruby/2.4'
-[TRACE] - [ruby2.4] - Running 'build' for base image 'alpine'
-[TRACE] - [ruby2.4] - Completed 'build' for base image 'alpine'
-[TRACE] - [ruby2.4] - Running 'build'
+[TRACE] - [ruby-2.4] - Running 'build' for base image 'alpine'
+[TRACE] - [ruby-2.4] - Completed 'build' for base image 'alpine'
+[TRACE] - [ruby-2.4] - Running 'build'
 Sending build context to Docker daemon  11.78kB
 Step 1/21 : ARG REPO
 Step 2/21 : ARG BASE_IMAGE
@@ -132,7 +132,7 @@ When any `make` command is invoked, a number of runtime defined parameters are l
 
 **Issue:**
 
-This happens when you build a base image e.g. `alpine3.7` in one process execution and then attempt to build a image that depends on `alpine3.7` in a new process execution.
+This happens when you build a base image e.g. `alpine-3.7` in one process execution and then attempt to build a image that depends on `alpine-3.7` in a new process execution.
 
 **Solution:**
 
