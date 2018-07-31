@@ -261,8 +261,6 @@ These values should also be added to the `ARGS` `meta` variable if they need to 
 
 The `custom` variables are not yet supported.
 
-This section is still WIP and a TODO. Items to cover:
-
 ### Validation
 
 `Base.make` is responsible for validation of build arguments before invoking the `build` and `deploy` targets which call `docker build` and `docker push` respectively. The logic has been generalized so `.env` must just specify some variables that contain a list of variable names if they need to be validated prior to execution. This commonly appears as:
