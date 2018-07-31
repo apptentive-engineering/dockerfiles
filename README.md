@@ -286,7 +286,7 @@ DEPLOY_REQUIREMENTS_VARIABLES = RUBY_VERSION
 TEST_REQUIREMENTS_VARIABLES =
 ```
 
-If new variables come into existence that need to be validated for **all** images within the repository, these should be added to the `.common/.env` file using the `GLOBAL_` prefix variables.
+If new variables come into existence that need to be validated for **all** images within the repository, these should be added to the root `.common/.env` file using the `GLOBAL_` prefix variables.
 
 ### Dependency Detection
 
