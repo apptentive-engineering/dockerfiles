@@ -61,10 +61,14 @@ RUN apk add --no-cache $ALPINE_CA_CERTIFICATES_PACKAGE_NAME="$ALPINE_CA_CERTIFIC
     chmod +x /usr/local/bin/dumb-init
 
 RUN addgroup -S $GRP -g $GID && \
-    adduser -S -G $GRP -u $UID $USR
+    adduser -S -G $GRP -u $UID $USR && \
+    mkdir -p /Users && \
+    ln -s /home/$USR /Users/$USR
 
 USER $USR
+
 WORKDIR /home/$USR
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+
 CMD ["/usr/bin/env", "sh"]
