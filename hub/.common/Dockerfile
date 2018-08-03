@@ -35,12 +35,22 @@ FROM $REPO/$BASE_IMAGE:$TAG as runtime
 
 ARG LABEL_PREFIX
 ARG HUB_VERSION
+ARG ALPINE_GIT_PACKAGE_NAME
+ARG ALPINE_GIT_PACKAGE_VERSION
 
 RUN test -n "$LABEL_PREFIX" && \
-    test -n "$HUB_VERSION"
+    test -n "$HUB_VERSION" && \
+    test -n "$ALPINE_GIT_PACKAGE_NAME" && \
+    test -n "$ALPINE_GIT_PACKAGE_VERSION"
 
 LABEL $LABEL_PREFIX.hub.version=$HUB_VERSION
 
 ENV HUB_VERSION=$HUB_VERSION
+
+USER root
+
+RUN apk add --no-cache $ALPINE_GIT_PACKAGE_NAME="$ALPINE_GIT_PACKAGE_VERSION"
+
+USER $USER
 
 COPY --from=build /usr/local/bin/hub /usr/local/bin/hub
