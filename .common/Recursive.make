@@ -21,6 +21,13 @@ include $(ROOT_COMMON_ENVFILE)
 export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
 endif
 
+# Load the common root .custom file into the current make context if one exists.
+ROOT_COMMON_CUSTOMFILE := $(ROOT_COMMON_DIR)/.custom
+ifneq ($(strip $(wildcard $(ROOT_COMMON_CUSTOMFILE))),)
+include $(ROOT_COMMON_CUSTOMFILE)
+export $(shell sed 's/=.*//' $(ROOT_COMMON_CUSTOMFILE))
+endif
+
 PARENT_COMMON_DIR := $(shell pwd | xargs dirname)/.common
 
 # Load the common parent .default file into the current make context if one exists.
@@ -35,6 +42,13 @@ PARENT_COMMON_ENVFILE := $(PARENT_COMMON_DIR)/.env
 ifneq ($(strip $(wildcard $(PARENT_COMMON_ENVFILE))),)
 include $(PARENT_COMMON_ENVFILE)
 export $(shell sed 's/=.*//' $(PARENT_COMMON_ENVFILE))
+endif
+
+# Load the common parent .custom file into the current make context if one exists.
+PARENT_COMMON_CUSTOMFILE := $(PARENT_COMMON_DIR)/.custom
+ifneq ($(strip $(wildcard $(PARENT_COMMON_CUSTOMFILE))),)
+include $(PARENT_COMMON_CUSTOMFILE)
+export $(shell sed 's/=.*//' $(PARENT_COMMON_CUSTOMFILE))
 endif
 
 # Load the local .env file into the current make context if one exists.
