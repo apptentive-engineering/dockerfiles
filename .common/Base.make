@@ -8,18 +8,32 @@
 
 .SUFFIXES:
 
-# Load the common root .env file into the current make context if one exists.
 ROOT_COMMON_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+# Load the common root .default file into the current make context if one exists.
+ROOT_COMMON_DEFAULTFILE := $(ROOT_COMMON_DIR)/.default
+ifneq ($(strip $(wildcard $(ROOT_COMMON_DEFAULTFILE))),)
+include $(ROOT_COMMON_DEFAULTFILE)
+export $(shell sed 's/=.*//' $(ROOT_COMMON_DEFAULTFILE))
+endif
+
+# Load the common root .env file into the current make context if one exists.
 ROOT_COMMON_ENVFILE := $(ROOT_COMMON_DIR)/.env
 ifneq ($(strip $(wildcard $(ROOT_COMMON_ENVFILE))),)
 include $(ROOT_COMMON_ENVFILE)
 export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
 endif
 
-# Load the common parent .env file into the current make context if one exists.
-# This is only necessary for when child targets are invoked directly instead of using
-# the parent/recursive targets.
 PARENT_COMMON_DIR := $(shell pwd | xargs dirname)/.common
+
+# Load the common parent .default file into the current make context if one exists.
+PARENT_COMMON_DEFAULTFILE := $(PARENT_COMMON_DIR)/.default
+ifneq ($(strip $(wildcard $(PARENT_COMMON_DEFAULTFILE))),)
+include $(PARENT_COMMON_DEFAULTFILE)
+export $(shell sed 's/=.*//' $(PARENT_COMMON_DEFAULTFILE))
+endif
+
+# Load the common parent .env file into the current make context if one exists.
 PARENT_COMMON_ENVFILE := $(PARENT_COMMON_DIR)/.env
 ifneq ($(strip $(wildcard $(PARENT_COMMON_ENVFILE))),)
 include $(PARENT_COMMON_ENVFILE)

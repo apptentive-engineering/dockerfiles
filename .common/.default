@@ -1,0 +1,10 @@
+# .common/.default
+#
+# Variables that are loaded by each base/recursive Makefile. Variable definitions in this file are
+# loaded first but potentially overwritten by .env or .custom files.
+
+# Name of repository within image registry to use for deployments.
+REPO := ahawker
+
+# Prefix string to add to all labels applied to images.
+LABEL_PREFIX := io.hawker

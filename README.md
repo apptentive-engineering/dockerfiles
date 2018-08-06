@@ -225,14 +225,15 @@ BASE_IMAGE = foobar-base
 PACKAGE_VERSION = 1.2.3
 ```
 
-There are four types of `.env` files: `root`, `parent`, `local`, and `custom`.
+There are five types of `.env` files: `default`, `root`, `parent`, `local`, and `custom`.
 
+* `default` - Located within a `.common` or local directory in `.default` files.
 * `root` - Located in the repository root at `.common/.env`.
 * `parent` - Located within a `.common/.env` directory that is a sibling to a `Recursive.make` symlink.
 * `local` - Located within the same directory as a `Dockerfile` and `Base.make` symlink.
-* `custom` - Located within a `.common` or local directory.
+* `custom` - Located within a `.common` or local directory in `.custom` files.
 
-The values of variables within `.env` files can be overwritten by other `.env` files based on the resolution order, which is `root`, `parent`, `local`, and `custom`. This means that more generic variables defined within the `parent` directory can be overwritten by image/version specific values within their `local` copy.
+The values of variables within `.env` files can be overwritten by other `.env` files based on the resolution order, which is `default`, `root`, `parent`, `local`, and `custom`. This means that more generic variables defined within the `parent` directory can be overwritten by image/version specific values within their `local` copy.
 
 #### Known/Required Variables
 

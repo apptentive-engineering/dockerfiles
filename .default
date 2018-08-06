@@ -1,0 +1,4 @@
+# .default
+#
+# Variables that are loaded by the recursive Makefile located in the root of the dockerfiles repository.
+# Variable definitions in this file are loaded first but potentially overwritten by .env or .custom files.
