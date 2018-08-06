@@ -12,8 +12,8 @@
 ROOT_COMMON_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 ROOT_COMMON_ENVFILE := $(ROOT_COMMON_DIR)/.env
 ifneq ($(strip $(wildcard $(ROOT_COMMON_ENVFILE))),)
-	include $(ROOT_COMMON_ENVFILE)
-	export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
+include $(ROOT_COMMON_ENVFILE)
+export $(shell sed 's/=.*//' $(ROOT_COMMON_ENVFILE))
 endif
 
 # Load the common parent .env file into the current make context if one exists.
@@ -22,22 +22,22 @@ endif
 PARENT_COMMON_DIR := $(shell pwd | xargs dirname)/.common
 PARENT_COMMON_ENVFILE := $(PARENT_COMMON_DIR)/.env
 ifneq ($(strip $(wildcard $(PARENT_COMMON_ENVFILE))),)
-	include $(PARENT_COMMON_ENVFILE)
-	export $(shell sed 's/=.*//' $(PARENT_COMMON_ENVFILE))
+include $(PARENT_COMMON_ENVFILE)
+export $(shell sed 's/=.*//' $(PARENT_COMMON_ENVFILE))
 endif
 
 # Load the local .env file into the current make context if one exists.
 ENVFILE ?= .env
 ifneq ($(strip $(wildcard $(ENVFILE))),)
-	include $(ENVFILE)
-	export $(shell sed 's/=.*//' $(ENVFILE))
+include $(ENVFILE)
+export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
 # Load the local .custom file into the current make context if one exists.
 CUSTOMFILE ?= .custom
 ifneq ($(strip $(wildcard $(CUSTOMFILE))),)
-	include $(CUSTOMFILE)
-	export $(shell sed 's/=.*//' $(CUSTOMFILE))
+include $(CUSTOMFILE)
+export $(shell sed 's/=.*//' $(CUSTOMFILE))
 endif
 
 # Load the root .partials files into the current make context if they exist.
@@ -45,7 +45,7 @@ endif
 # have access to the most up-to-date make context.
 ROOT_COMMON_PARTIALS_DIR ?= $(ROOT_COMMON_DIR)/partials
 ifneq ($(strip $(wildcard $(ROOT_COMMON_PARTIALS_DIR))),)
-	include $(ROOT_COMMON_PARTIALS_DIR)/*
+include $(ROOT_COMMON_PARTIALS_DIR)/*
 endif
 
 # Validate existence of core variables required for virtually all actions.
