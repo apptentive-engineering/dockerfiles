@@ -1,0 +1,4 @@
+# .common/.custom
+#
+# Variables that are loaded by each base/recursive Makefile.
+# Variable definitions in this file are loaded last and should be used to implement any custom overrides.

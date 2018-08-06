@@ -230,7 +230,7 @@ There are four types of `.env` files: `root`, `parent`, `local`, and `custom`.
 * `root` - Located in the repository root at `.common/.env`.
 * `parent` - Located within a `.common/.env` directory that is a sibling to a `Recursive.make` symlink.
 * `local` - Located within the same directory as a `Dockerfile` and `Base.make` symlink.
-* `custom` - Not supported (yet).
+* `custom` - Located within a `.common` or local directory.
 
 The values of variables within `.env` files can be overwritten by other `.env` files based on the resolution order, which is `root`, `parent`, `local`, and `custom`. This means that more generic variables defined within the `parent` directory can be overwritten by image/version specific values within their `local` copy.
 
@@ -267,7 +267,9 @@ These values should also be added to the `ARGS` `meta` variable if they need to 
 
 ##### Custom
 
-The `custom` variables are not yet supported.
+Custom variables are no different than any other `.env` variable/file beyond the fact that they are last to load, thus giving them the highest priority.
+
+These files should be used for your specific build environments committed within your fork of this repository but not pushed back to the upstream repository.
 
 ### Validation
 
@@ -405,6 +407,8 @@ $ git fetch upstream
 $ git rebase upstream/master
 $ git push origin master
 ```
+
+If you wish to override variables in your local setup, define them within `.custom` files and they should be given the highest priority based on the variable resolution order. These files should **not** be pushed back in pull-requests to the upstream repository.
 
 ## License
 

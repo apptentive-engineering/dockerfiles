@@ -33,6 +33,13 @@ ifneq ($(strip $(wildcard $(ENVFILE))),)
 	export $(shell sed 's/=.*//' $(ENVFILE))
 endif
 
+# Load the local .custom file into the current make context if one exists.
+CUSTOMFILE ?= .custom
+ifneq ($(strip $(wildcard $(CUSTOMFILE))),)
+	include $(CUSTOMFILE)
+	export $(shell sed 's/=.*//' $(CUSTOMFILE))
+endif
+
 # Load the root .partials files into the current make context if they exist.
 # This should always happen after loading all necessary .env files so the partials
 # have access to the most up-to-date make context.
