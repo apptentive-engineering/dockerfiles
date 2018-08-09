@@ -1,0 +1,81 @@
+# dockerfiles/mongodb
+#
+# Dockerfile for MongoDB (https://www.mongodb.com/)
+ARG BASE_IMAGE_REPO
+ARG BASE_IMAGE
+ARG BASE_IMAGE_TAG=latest
+
+FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG
+
+ARG USR
+ARG GRP
+ARG USR_ID
+ARG GRP_ID
+ARG COMMIT
+ARG BUILD_ID
+ARG BUILD_TS
+ARG INIT_VERSION
+ARG MAINTAINER
+ARG LABEL_PREFIX
+ARG MONGODB_VERSION
+ARG MONGODB_USER
+ARG MONGODB_GROUP
+
+RUN test -n "$USR" && \
+    test -n "$GRP" && \
+    test -n "$USR_ID" && \
+    test -n "$GRP_ID" && \
+    test -n "$COMMIT" && \
+    test -n "$BUILD_ID" && \
+    test -n "$BUILD_TS" && \
+    test -n "$INIT_VERSION" && \
+    test -n "$MAINTAINER" && \
+    test -n "$LABEL_PREFIX" && \
+    test -n "$MONGODB_VERSION" && \
+    test -n "$MONGODB_USER" && \
+    test -n "$MONGODB_GROUP"
+
+RUN ([ $USR_ID = `id -u $MONGODB_USER` ] || (echo "USR_ID must eq `id -u $MONGODB_USER`" && exit 1)) && \
+    ([ $GRP_ID = `id -u $MONGODB_GROUP` ] || (echo "GRP_ID must eq `id -u $MONGODB_GROUP`" && exit 1))
+
+LABEL $LABEL_PREFIX.commit=$COMMIT \
+      $LABEL_PREFIX.build.id=$BUILD_ID \
+      $LABEL_PREFIX.build.ts=$BUILD_TS \
+      $LABEL_PREFIX.init.version=$INIT_VERSION \
+      $LABEL_PREFIX.maintainer=$MAINTAINER \
+      $LABEL_PREFIX.mongodb.version=$MONGODB_VERSION
+
+ENV USR=$USR \
+    GRP=$GRP \
+    USR_ID=$USR_ID \
+    GRP_ID=$GRP_ID \
+    COMMIT=$COMMIT \
+    BUILD_ID=$BUILD_ID \
+    BUILD_TS=$BUILD_TS \
+    INIT_VERSION=$INIT_VERSION \
+    MAINTAINER=$MAINTAINER \
+    LABEL_PREFIX=$LABEL_PREFIX \
+    MONGODB_VERSION=$MONGODB_VERSION \
+    MONGODB_USER=$MONGODB_USER \
+    MONGODB_GROUP=$MONGODB_GROUP \
+    LANG=C.UTF-8
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget && \
+    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
+    chmod +x /usr/local/bin/dumb-init && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get purge -y --auto-remove wget
+
+RUN groupadd --non-unique --system --gid $GRP_ID $GRP && \
+    useradd --non-unique --system --gid $GRP_ID --uid $USR_ID $USR && \
+    mkdir -p /Users && \
+    ln -s /home/$USR /Users/$USR
+
+USER $USR
+
+WORKDIR /home/$USR
+
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+
+CMD ["docker-entrypoint.sh", "mongod"]
