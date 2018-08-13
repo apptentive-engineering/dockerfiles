@@ -1,11 +1,29 @@
 # dockerfiles/mongodb
 #
 # Dockerfile for MongoDB (https://www.mongodb.com/)
+
+# Stage: Deps
+# Image responsible for pulling down image dependencies.
 ARG BASE_IMAGE_REPO
 ARG BASE_IMAGE
 ARG BASE_IMAGE_TAG=latest
 
-FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG
+FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG as deps
+
+ARG INIT_VERSION
+
+RUN test -n "$INIT_VERSION"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget && \
+    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
+    chmod +x /usr/local/bin/dumb-init
+
+##################################################################################################
+
+# Stage: Runtime
+# Image responsible for setting up a MongoDB instance.
+FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG as runtime
 
 ARG USR
 ARG GRP
@@ -66,17 +84,19 @@ ENV USR=$USR \
     MONGODB_GROUP=$MONGODB_GROUP \
     LANG=C.UTF-8
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget && \
-    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
-    chmod +x /usr/local/bin/dumb-init && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get purge -y --auto-remove wget
+USER root
 
 RUN groupadd --non-unique --system --gid $GRP_ID $GRP && \
     useradd --non-unique --system --gid $GRP_ID --uid $USR_ID $USR && \
+    mkdir -p /home/$USR && \
+    chown -R $USR:$GRP /home/$USR && \
     mkdir -p /Users && \
     ln -s /home/$USR /Users/$USR
+
+RUN mkdir -p /home/$MONGODB_USER && \
+    chown -R $MONGODB_USER:$MONGODB_GROUP /home/$MONGODB_USER
+
+COPY --from=deps /usr/local/bin/dumb-init /usr/local/bin/dumb-init
 
 USER $USR
 
