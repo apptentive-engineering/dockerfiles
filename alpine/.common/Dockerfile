@@ -11,6 +11,8 @@ ARG USR
 ARG GRP
 ARG USR_ID
 ARG GRP_ID
+ARG REPO
+ARG TAG
 ARG COMMIT
 ARG BUILD_ID
 ARG BUILD_TS
@@ -25,6 +27,8 @@ RUN test -n "$USR" && \
     test -n "$GRP" && \
     test -n "$USR_ID" && \
     test -n "$GRP_ID" && \
+    test -n "$REPO" && \
+    test -n "$TAG" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
@@ -46,6 +50,8 @@ ENV USR=$USR \
     GRP=$GRP \
     USR_ID=$USR_ID \
     GRP_ID=$GRP_ID \
+    REPO=$REPO \
+    TAG=$TAG \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     BUILD_TS=$BUILD_TS \
