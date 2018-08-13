@@ -31,7 +31,6 @@ RUN apk add --update curl openssh && \
 
 # Stage: Runtime
 # Image responsible for running a Terraform binary.
-# TODO: Unsure how to parameterize a FROM statement with ARG in a multi-stage build.
 FROM $REPO/$BASE_IMAGE:$TAG as runtime
 
 ARG LABEL_PREFIX
