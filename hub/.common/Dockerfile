@@ -51,6 +51,6 @@ USER root
 
 RUN apk add --no-cache $ALPINE_GIT_PACKAGE_NAME="$ALPINE_GIT_PACKAGE_VERSION"
 
-USER $USER
+USER $USR
 
 COPY --from=build /usr/local/bin/hub /usr/local/bin/hub

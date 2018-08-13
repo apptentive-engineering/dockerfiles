@@ -54,8 +54,8 @@ RUN [ ! -e /etc/nsswitch.conf ] && echo "hosts: files dns" > /etc/nsswitch.conf
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && \
     chmod -R 755 "$GOPATH" && \
-    chown -R "$USER:$GROUP" "$GOPATH"
+    chown -R "$USR:$GRP" "$GOPATH"
 
-USER $USER
+USER $USR
 
 WORKDIR $GOPATH

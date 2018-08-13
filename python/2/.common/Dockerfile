@@ -34,6 +34,6 @@ USER root
 RUN apk add --no-cache $ALPINE_PYTHON_PACKAGE_NAME="$ALPINE_PYTHON_PACKAGE_VERSION" py-pip && \
     pip install --no-cache-dir --upgrade pip=="$PYTHON_PIP_VERSION"
 
-ENV PATH=$PATH:/home/$USER/.local/bin
+ENV PATH=$PATH:/home/$USR/.local/bin
 
-USER $USER
+USER $USR

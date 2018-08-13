@@ -51,6 +51,6 @@ USER root
 
 RUN apk add --update ca-certificates
 
-USER $USER
+USER $USR
 
 COPY --from=build /bin/terraform /usr/local/bin/terraform

@@ -34,6 +34,6 @@ USER root
 
 RUN apk add --no-cache file
 
-USER $USER
+USER $USR
 
 COPY --from=build /bin/shellcheck /usr/local/bin/shellcheck

@@ -23,7 +23,7 @@ ADD "https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION
 
 USER root
 
-RUN chown -R $USER:$USER $KUBECTL_PATH && \
+RUN chown -R $USR:$USR $KUBECTL_PATH && \
     chmod u+x $KUBECTL_PATH
 
-USER $USER
+USER $USR

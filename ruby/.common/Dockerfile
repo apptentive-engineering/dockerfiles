@@ -43,7 +43,7 @@ ENV RUBY_VERSION=$RUBY_VERSION \
     ALPINE_RUBY_JSON_PACKAGE_NAME=$ALPINE_RUBY_JSON_PACKAGE_NAME \
     ALPINE_RUBY_IRB_PACKAGE_NAME=$ALPINE_RUBY_IRB_PACKAGE_NAME
 
-RUN echo "gem: --no-ri --no-rdoc --no-document --no-suggestions --user-install" > /home/$USER/.gemrc
+RUN echo "gem: --no-ri --no-rdoc --no-document --no-suggestions --user-install" > /home/$USR/.gemrc
 
 USER root
 
@@ -53,8 +53,8 @@ RUN apk add --no-cache \
         $ALPINE_RUBY_IRB_PACKAGE_NAME="$ALPINE_RUBY_PACKAGE_VERSION" && \
     gem update --no-document --system $GEMS_VERSION
 
-ENV PATH=$PATH:/home/$USER/.gem/ruby/$RUBY_GEM_VERSION/bin
+ENV PATH=$PATH:/home/$USR/.gem/ruby/$RUBY_GEM_VERSION/bin
 
-USER $USER
+USER $USR
 
 RUN gem install bundler --force --version $BUNDLER_VERSION

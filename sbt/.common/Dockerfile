@@ -23,12 +23,12 @@ USER root
 
 RUN mkdir -p $SBT_DIR && \
     wget -qO- https://sbt-downloads.cdnedge.bluemix.net/releases/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz | tar xz -C $SBT_DIR --strip-components=1 && \
-    chown -R $USER:$USER $SBT_DIR
+    chown -R $USR:$USR $SBT_DIR
 
 ENV PATH=$PATH:$SBT_DIR/bin
 
-USER $USER
+USER $USR
 
-WORKDIR /home/$USER
+WORKDIR /home/$USR
 
 RUN sbt sbtVersion

@@ -42,8 +42,8 @@ LABEL $LABEL_PREFIX.commit=$COMMIT \
       $LABEL_PREFIX.maintainer=$MAINTAINER \
       $LABEL_PREFIX.alpine.version=$ALPINE_VERSION
 
-ENV USER=$USR \
-    GROUP=$GRP \
+ENV USR=$USR \
+    GRP=$GRP \
     UID=$UID \
     GID=$GID \
     COMMIT=$COMMIT \
