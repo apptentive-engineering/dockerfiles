@@ -10,13 +10,13 @@ ARG BASE_IMAGE_TAG=latest
 
 FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG as deps
 
-ARG INIT_VERSION
+ARG DUMB_INIT_VERSION
 
-RUN test -n "$INIT_VERSION"
+RUN test -n "$DUMB_INIT_VERSION"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends wget && \
-    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
+    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
     chmod +x /usr/local/bin/dumb-init
 
 ##################################################################################################
@@ -34,7 +34,7 @@ ARG TAG
 ARG COMMIT
 ARG BUILD_ID
 ARG BUILD_TS
-ARG INIT_VERSION
+ARG DUMB_INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
 ARG MONGODB_VERSION
@@ -50,7 +50,7 @@ RUN test -n "$USR" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
-    test -n "$INIT_VERSION" && \
+    test -n "$DUMB_INIT_VERSION" && \
     test -n "$MAINTAINER" && \
     test -n "$LABEL_PREFIX" && \
     test -n "$MONGODB_VERSION" && \
@@ -63,7 +63,7 @@ RUN ([ $USR_ID = `id -u $MONGODB_USER` ] || (echo "USR_ID must eq `id -u $MONGOD
 LABEL $LABEL_PREFIX.commit=$COMMIT \
       $LABEL_PREFIX.build.id=$BUILD_ID \
       $LABEL_PREFIX.build.ts=$BUILD_TS \
-      $LABEL_PREFIX.init.version=$INIT_VERSION \
+      $LABEL_PREFIX.dumb-init.version=$DUMB_INIT_VERSION \
       $LABEL_PREFIX.maintainer=$MAINTAINER \
       $LABEL_PREFIX.mongodb.version=$MONGODB_VERSION
 
@@ -76,7 +76,7 @@ ENV USR=$USR \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     BUILD_TS=$BUILD_TS \
-    INIT_VERSION=$INIT_VERSION \
+    DUMB_INIT_VERSION=$DUMB_INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
     MONGODB_VERSION=$MONGODB_VERSION \

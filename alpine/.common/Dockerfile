@@ -16,7 +16,7 @@ ARG TAG
 ARG COMMIT
 ARG BUILD_ID
 ARG BUILD_TS
-ARG INIT_VERSION
+ARG DUMB_INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
 ARG ALPINE_VERSION
@@ -32,7 +32,7 @@ RUN test -n "$USR" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
-    test -n "$INIT_VERSION" && \
+    test -n "$DUMB_INIT_VERSION" && \
     test -n "$MAINTAINER" && \
     test -n "$LABEL_PREFIX" && \
     test -n "$ALPINE_VERSION" && \
@@ -42,7 +42,7 @@ RUN test -n "$USR" && \
 LABEL $LABEL_PREFIX.commit=$COMMIT \
       $LABEL_PREFIX.build.id=$BUILD_ID \
       $LABEL_PREFIX.build.ts=$BUILD_TS \
-      $LABEL_PREFIX.init.version=$INIT_VERSION \
+      $LABEL_PREFIX.dumb-init.version=$DUMB_INIT_VERSION \
       $LABEL_PREFIX.maintainer=$MAINTAINER \
       $LABEL_PREFIX.alpine.version=$ALPINE_VERSION
 
@@ -55,7 +55,7 @@ ENV USR=$USR \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     BUILD_TS=$BUILD_TS \
-    INIT_VERSION=$INIT_VERSION \
+    DUMB_INIT_VERSION=$DUMB_INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
     ALPINE_VERSION=$ALPINE_VERSION \
@@ -64,7 +64,7 @@ ENV USR=$USR \
     LANG=C.UTF-8
 
 RUN apk add --no-cache $ALPINE_CA_CERTIFICATES_PACKAGE_NAME="$ALPINE_CA_CERTIFICATES_PACKAGE_VERSION" && \
-    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
+    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
     chmod +x /usr/local/bin/dumb-init
 
 RUN addgroup -S $GRP -g $GRP_ID && \

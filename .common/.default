@@ -27,4 +27,4 @@ USR_ID := 4739
 GRP_ID := 4739
 
 # Version of dumb-init to install.
-INIT_VERSION := 1.2.1
+DUMB_INIT_VERSION := 1.2.1
