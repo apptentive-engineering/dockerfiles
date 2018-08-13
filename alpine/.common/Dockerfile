@@ -9,8 +9,8 @@ FROM $BASE_IMAGE_REPO/$BASE_IMAGE:$BASE_IMAGE_TAG
 
 ARG USR
 ARG GRP
-ARG UID
-ARG GID
+ARG USR_ID
+ARG GRP_ID
 ARG COMMIT
 ARG BUILD_ID
 ARG BUILD_TS
@@ -23,8 +23,8 @@ ARG ALPINE_CA_CERTIFICATES_PACKAGE_VERSION
 
 RUN test -n "$USR" && \
     test -n "$GRP" && \
-    test -n "$UID" && \
-    test -n "$GID" && \
+    test -n "$USR_ID" && \
+    test -n "$GRP_ID" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
@@ -44,8 +44,8 @@ LABEL $LABEL_PREFIX.commit=$COMMIT \
 
 ENV USR=$USR \
     GRP=$GRP \
-    UID=$UID \
-    GID=$GID \
+    USR_ID=$USR_ID \
+    GRP_ID=$GRP_ID \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     BUILD_TS=$BUILD_TS \
@@ -61,8 +61,8 @@ RUN apk add --no-cache $ALPINE_CA_CERTIFICATES_PACKAGE_NAME="$ALPINE_CA_CERTIFIC
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${INIT_VERSION}/dumb-init_${INIT_VERSION}_amd64 && \
     chmod +x /usr/local/bin/dumb-init
 
-RUN addgroup -S $GRP -g $GID && \
-    adduser -S -G $GRP -u $UID $USR && \
+RUN addgroup -S $GRP -g $GRP_ID && \
+    adduser -S -G $GRP -u $USR_ID $USR && \
     mkdir -p /Users && \
     ln -s /home/$USR /Users/$USR
 

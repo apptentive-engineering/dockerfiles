@@ -9,11 +9,11 @@ GRP := hawker
 
 # Static ID of the non-root user.
 # The goal of this is to be deterministic across builds.
-UID := 4739
+USR_ID := 4739
 
 # Static ID of the non-root user group.
 # The goal of this is to be deterministic across builds.
-GID := 4739
+GRP_ID := 4739
 
 # Version of dumb-init to install.
 INIT_VERSION := 1.2.1
