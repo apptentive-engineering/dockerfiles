@@ -1,0 +1,2 @@
+# Default value to prefix all exported environment variables with.
+ENV_PREFIX ?= "DOCKERFILES"
