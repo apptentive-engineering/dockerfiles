@@ -147,6 +147,26 @@ $(TEST):
 	@$(MAKE) -C $(@:%-test=%) test
 	$(call TRACE, [$(DIRNAME)] - Completed 'test' for child image '$(@:%-test=%)')
 
+# Add targets for performing releases only if we're processing the root Makefile.
+ifeq ($(MAKELEVEL),0)
+.PHONY: patch-release push-tags
+patch-release: patch-bump  ## Release new version with next patch version.
+
+.PHONY: minor-release
+minor-release: minor-bump push-tags  ## Release new version with next minor version.
+
+.PHONY: major-release
+major-release: major-bump push-tags  ## Release new version with next major version.
+
+.PHONY: %-bump
+%-bump:
+	$(call BUMPVERSION,$*)
+
+.PHONY: push-tags
+push-tags:
+	@git push && git push --tags
+endif
+
 .PHONY: help
 help: ## Print Makefile usage.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
