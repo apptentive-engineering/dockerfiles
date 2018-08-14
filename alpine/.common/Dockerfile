@@ -16,6 +16,7 @@ ARG TAG
 ARG COMMIT
 ARG BUILD_ID
 ARG BUILD_TS
+ARG VERSION
 ARG DUMB_INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
@@ -32,6 +33,7 @@ RUN test -n "$USR" && \
     test -n "$COMMIT" && \
     test -n "$BUILD_ID" && \
     test -n "$BUILD_TS" && \
+    test -n "$VERSION" && \
     test -n "$DUMB_INIT_VERSION" && \
     test -n "$MAINTAINER" && \
     test -n "$LABEL_PREFIX" && \
@@ -55,6 +57,7 @@ ENV USR=$USR \
     COMMIT=$COMMIT \
     BUILD_ID=$BUILD_ID \
     BUILD_TS=$BUILD_TS \
+    VERSION=$VERSION \
     DUMB_INIT_VERSION=$DUMB_INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
