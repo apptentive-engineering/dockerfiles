@@ -28,3 +28,8 @@ GRP_ID := 4739
 
 # Version of dumb-init to install.
 DUMB_INIT_VERSION := 1.2.1
+
+# Fully-qualified path where the image WORKDIR should be set.
+# At runtime, this will likely be a volume that contains content necessary
+# for tools within the image to run against.
+WORKDIR := /app

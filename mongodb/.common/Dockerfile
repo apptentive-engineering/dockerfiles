@@ -38,6 +38,7 @@ ARG VERSION
 ARG DUMB_INIT_VERSION
 ARG MAINTAINER
 ARG LABEL_PREFIX
+ARG WORKDIR
 ARG MONGODB_VERSION
 ARG MONGODB_USER
 ARG MONGODB_GROUP
@@ -55,6 +56,7 @@ RUN test -n "$USR" && \
     test -n "$DUMB_INIT_VERSION" && \
     test -n "$MAINTAINER" && \
     test -n "$LABEL_PREFIX" && \
+    test -n "$WORKDIR" && \
     test -n "$MONGODB_VERSION" && \
     test -n "$MONGODB_USER" && \
     test -n "$MONGODB_GROUP"
@@ -82,6 +84,7 @@ ENV USR=$USR \
     DUMB_INIT_VERSION=$DUMB_INIT_VERSION \
     MAINTAINER=$MAINTAINER \
     LABEL_PREFIX=$LABEL_PREFIX \
+    WORKDIR=$WORKDIR \
     MONGODB_VERSION=$MONGODB_VERSION \
     MONGODB_USER=$MONGODB_USER \
     MONGODB_GROUP=$MONGODB_GROUP \
@@ -103,7 +106,7 @@ COPY --from=deps /usr/local/bin/dumb-init /usr/local/bin/dumb-init
 
 USER $USR
 
-WORKDIR /home/$USR
+WORKDIR $WORKDIR
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 

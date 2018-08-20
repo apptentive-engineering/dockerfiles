@@ -29,6 +29,4 @@ ENV PATH=$PATH:$SBT_DIR/bin
 
 USER $USR
 
-WORKDIR /home/$USR
-
 RUN sbt sbtVersion
