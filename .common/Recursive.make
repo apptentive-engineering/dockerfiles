@@ -149,8 +149,8 @@ $(TEST):
 
 # Add targets for performing releases only if we're processing the root Makefile.
 ifeq ($(MAKELEVEL),0)
-.PHONY: patch-release push-tags
-patch-release: patch-bump  ## Release new version with next patch version.
+.PHONY: patch-release
+patch-release: patch-bump push-tags  ## Release new version with next patch version.
 
 .PHONY: minor-release
 minor-release: minor-bump push-tags  ## Release new version with next minor version.

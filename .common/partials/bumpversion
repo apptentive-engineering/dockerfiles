@@ -1,0 +1,27 @@
+# .common/partials/bumpversion
+#
+# Makefile partial for 'bumpversion' related functionality.
+
+BUMPVERSION_VERSION := 0.5.3
+BUMPVERSION_REPO := $(REPO)
+BUMPVERSION_IMAGE := $(BUMPVERSION_REPO)/bumpversion-$(BUMPVERSION_VERSION)
+BUMPVERSION_TAG := latest
+BUMPVERSION_WORKDIR := /app
+
+# Invoke 'bumpversion' with given parameters to increment repo to the next version.
+BUMPVERSION = \
+	@docker run \
+		--rm \
+		--interactive \
+		--tty \
+		--volume $(HOME)/.gitconfig:/home/$(USR)/.gitconfig \
+		--volume $(HOME)/.gnupg:/home/$(USR)/.gnupg \
+		--volume $(DOCKERFILES_DIR):$(BUMPVERSION_WORKDIR) \
+		--workdir $(BUMPVERSION_WORKDIR) \
+		$(BUMPVERSION_IMAGE):$(BUMPVERSION_TAG) \
+		bumpversion \
+			--commit \
+			--tag \
+			--current-version $(VERSION) \
+			$(1) \
+			$(BUMPVERSION_WORKDIR)/VERSION
