@@ -1,0 +1,24 @@
+# dockerfiles/mkdocs
+#
+# Dockerfile for https://github.com/mkdocs/mkdocs
+ARG REPO
+ARG BASE_IMAGE
+ARG TAG=latest
+
+FROM $REPO/$BASE_IMAGE:$TAG
+
+ARG LABEL_PREFIX
+ARG MKDOCS_VERSION
+ARG MKDOCS_MATERIAL_VERSION
+
+RUN test -n "$LABEL_PREFIX" && \
+    test -n "$MKDOCS_VERSION" && \
+    test -n "$MKDOCS_MATERIAL_VERSION"
+
+LABEL $LABEL_PREFIX.mkdocs.version=$MKDOCS_VERSION \
+      $LABEL_PREFIX.mkdocs.material.version=$MKDOCS_MATERIAL_VERSION
+
+ENV MKDOCS_VERSION=$MKDOCS_VERSION \
+    MKDOCS_MATERIAL_VERSION=$MKDOCS_MATERIAL_VERSION
+
+RUN pip install --user mkdocs==$MKDOCS_VERSION mkdocs-material==$MKDOCS_MATERIAL_VERSION
