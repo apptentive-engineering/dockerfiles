@@ -30,3 +30,9 @@ DOCKER_CLEAN = \
 
 # Invoke `docker push` for all tags in the current make context.
 DOCKER_DEPLOY = @for tag in $(GLOBAL_TAGS) $(TAGS) ; do docker push $$tag ; done
+
+# Invoke `docker pull` to get an image from the remote image repository.
+DOCKER_PULL = @docker pull $(1)
+
+# Invoke `docker tag` for all tags in the current make context against the given image.
+DOCKER_TAG = @for tag in $(GLOBAL_TAGS) $(TAGS) ; do docker tag $(1) $$tag ; done
