@@ -123,6 +123,9 @@ all: test build deploy | all-requirements  ## Build and deploy image created fro
 # because it's deprecated. _However_, it still needs to be linked to the other images in this
 # build. In this case, we pull down the latest copy of the image, tag it with context for this
 # current build so it can be deployed as part of the group.
+#
+# If the image directory and contains a 'skip' file, just no-op the build target. This means that
+# we don't even want to try and pull down a remote version for this image.
 FROZENFILE := frozen
 ifeq ($(strip $(wildcard $(FROZENFILE))),)
 build: $(BUILD_PREREQUISITES)  ## Build image from Dockerfile.
@@ -131,12 +134,18 @@ build: $(BUILD_PREREQUISITES)  ## Build image from Dockerfile.
 	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 else
+SKIPFILE := skip
+ifeq ($(strip $(wildcard $(SKIPFILE))),)
 build: $(BUILD_PREREQUISITES)
 	$(call TRACE, [$(IMAGE)] - Running '$@')
 	$(call DOCKER_PULL,$(REPO)/$(IMAGE):latest)
 	$(call DOCKER_TAG,$(REPO)/$(IMAGE):latest)
 	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
+else
+build:
+	$(NOOP)
+endif
 endif
 
 .PHONY: clean
