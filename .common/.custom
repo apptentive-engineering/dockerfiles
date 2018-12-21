@@ -1,4 +1,24 @@
 # .common/.custom
-#
-# Variables that are loaded by each base/recursive Makefile.
-# Variable definitions in this file are loaded last and should be used to implement any custom overrides.
+
+# Name of repository within image registry to use for deployments.
+REPO := apptentive
+
+# Prefix string to add to all labels applied to images.
+LABEL_PREFIX := com.apptentive
+
+# Contact information for the maintainer for the Dockerfiles.
+MAINTAINER := "Apptentive Engineering <engineering@apptentive.com>"
+
+# Name of non-root user in the image.
+USR := apptentive
+
+# Name of non-root user group in the image.
+GRP := apptentive
+
+# Static ID of the non-root user.
+# The goal of this is to be deterministic across builds.
+USR_ID := 4739
+
+# Static ID of the non-root user group.
+# The goal of this is to be deterministic acroqss builds.
+GRP_ID := 4739
