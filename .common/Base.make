@@ -119,6 +119,18 @@ endif
 
 all: test build deploy | all-requirements  ## Build and deploy image created from Dockerfile.
 
+# If the image directory contains a 'skip' file, all targets should be NOOP actions.
+SKIPFILE := skip
+ifneq ($(strip $(wildcard $(SKIPFILE))),)
+build:
+	$(NOOP)
+clean:
+	$(NOOP)
+deploy:
+	$(NOOP)
+test:
+	$(NOOP)
+else
 # If the image directory contains a 'frozen' file, that means we don't want to build it
 # because it's deprecated. _However_, it still needs to be linked to the other images in this
 # build. In this case, we pull down the latest copy of the image, tag it with context for this
@@ -134,18 +146,12 @@ build: $(BUILD_PREREQUISITES)  ## Build image from Dockerfile.
 	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
 else
-SKIPFILE := skip
-ifeq ($(strip $(wildcard $(SKIPFILE))),)
 build: $(BUILD_PREREQUISITES)
 	$(call TRACE, [$(IMAGE)] - Running '$@')
 	$(call DOCKER_PULL,$(REPO)/$(IMAGE):latest)
 	$(call DOCKER_TAG,$(REPO)/$(IMAGE):latest)
 	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
-else
-build:
-	$(NOOP)
-endif
 endif
 
 .PHONY: clean
@@ -168,6 +174,7 @@ test: $(TEST_PREREQUISITES)  ## Test and validate files necessary to build image
 	$(HADOLINT)
 	$(call EMPTY_TARGET_CREATE,$@)
 	$(call TRACE, [$(IMAGE)] - Completed '$@')
+endif
 
 .PHONY: all-requirements
 all-requirements: build-requirements deploy-requirements
