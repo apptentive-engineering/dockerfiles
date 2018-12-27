@@ -9,6 +9,9 @@ REPO := ahawker
 # Prefix string to add to all labels applied to images.
 LABEL_PREFIX := io.hawker
 
+# Prefix string to add to dockerfiles-specific environment variables.
+ENV_PREFIX := DOCKERFILES
+
 # Contact information for the maintainer for the Dockerfiles.
 MAINTAINER := "Andrew Hawker <andrew.r.hawker@gmail.com>"
 
