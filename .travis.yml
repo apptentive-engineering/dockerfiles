@@ -22,7 +22,6 @@ deploy:
   script: make deploy
   on:
     branch: master
-    tags: true
 env:
   global:
   - secure: "PDsz2eTTz44Q//tjpTDKi+A1x+bR4FzTHNwJowlmviV6njQcALlpQrGfbYHccVgitlj6K2Wr5+74OKFvqurKpxlabm2OjdEJzKX63CKPSKn2k9DkuVYLpsZDkGVjD1bqbIowzfbRq891UqO/dHUOOttL5ZANEtvSrkg9NQFHY08NPyJgS/HcuU6nYFjFuTSLFxvhZizID6cKP7fUUclCwMK4skhcd05SnSchdHGOat4lN4NZw0VRYh9mwsYIcgA5yqoroXdm8X3IkudiuVDgmei/antgwi67HbvgLhoqCWbf5ryTQ/00wei2cI6f00ucVBLMJ9JD4+1KRK7UYivXzggYDPE2XB2/bZMVLm3b1q4Y0mGyqttH3F7YL/NgpV5xENXhAIhc9tN13Mj2rC8BLiVVINiCtfC3aZe93vx1th1BDaIbPm5Ds4ApdYBSMSHr7TVHDRv5tupg8ZlRjO3/HviHqBJ0Yd6JSSTx+fUsFbm/Pje5Nx4ATw99AQqm3LLQPW6YgM+3/GUogB2F7ZVuZNaOMjYDNurDEcQGVc+cJX6humb6tNJ56wWBGYsBtpu/QnFhpBL2iBt62/IzyH5n6u90QHjW2CswWblvXyzbq9CNF4iRDNe4FenJeoP1h492ryX/DLJin6we/eISA1UVLBogfWsvz9vTksMLpd23Goo="
