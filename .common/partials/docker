@@ -26,7 +26,7 @@ DOCKER_CLEAN = \
 		--all \
 		--force \
 		--filter "label=$(LABEL_PREFIX).image=$(IMAGE)" \
-		--filter "until=$(BUILD_TS)"
+		--filter "until=1s"
 
 # Invoke `docker push` for all tags in the current make context.
 DOCKER_DEPLOY = @for tag in $(GLOBAL_TAGS) $(TAGS) ; do docker push $$tag ; done
